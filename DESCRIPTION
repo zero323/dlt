@@ -16,6 +16,7 @@ Imports:
 Suggests:
   testthat (>= 3.0.0),
   withr (>= 2.4.2),
+  rlang (>= 0.4.11),
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Config/testthat/edition: 3
