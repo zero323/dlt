@@ -3,3 +3,4 @@
 export(dlt_read)
 exportMethods(dlt_write)
 importClassesFrom(SparkR,SparkDataFrame)
+importFrom(magrittr,"%>%")

@@ -14,5 +14,13 @@
 # limitations under the License.
 #
 
+#' Pipe
+#'
+#' @importFrom magrittr %>%
+#' @name %>%
+#' @rdname pipe
+NULL
+
+
 #' @importClassesFrom SparkR SparkDataFrame
 NULL
