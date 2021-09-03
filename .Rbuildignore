@@ -2,3 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE$
 ^.idea$
+^metastore_db$
+^spark-warehouse$
+^tests/testthat/metastore_db$
+^tests/testthat/spark-warehouse$

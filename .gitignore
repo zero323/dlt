@@ -47,3 +47,7 @@ po/*~
 
 # Idea files
 .idea
+
+# Metastore files
+metastore_db
+spark-warehouse
