@@ -14,17 +14,21 @@
 # limitations under the License.
 #
 
-#' Generate test file name
+#' Load data from test path, with optional alias
 #'
 #' @noRd
-delta_test_tempfile <- function() {
-  tempfile(pattern = "delta_test_")
-}
+test_data <- function(name = c("target", "source"), alias = FALSE) {
+  name <- match.arg(name)
 
+  finalize <- if (alias) {
+    function(x) SparkR::alias(x, name)
+  } else {
+    identity
+  }
 
-#' Generate test table name
-#'
-#' @noRd
-delta_test_name <- function(prefix = "delta_test") {
-  paste(prefix, stringi::stri_rand_strings(1, 10), sep = "_")
+  name %>%
+    paste0(".parquet") %>%
+    testthat::test_path("data", .) %>%
+    SparkR::read.parquet() %>%
+    finalize()
 }
