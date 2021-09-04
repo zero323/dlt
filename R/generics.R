@@ -19,3 +19,10 @@
 setGeneric("dlt_write", function(df, path, ...) {
   standardGeneric("dlt_write")
 })
+
+
+#' @name write.delta
+#' @rdname write.delta
+setGeneric("write.delta", function(df, path, ...) {
+  standardGeneric("write.delta")
+})

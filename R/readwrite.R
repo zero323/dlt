@@ -37,6 +37,26 @@ dlt_read <- function(path, ...) {
 }
 
 
+#' Create a SparkDataFrame from a Delta Table
+#'
+#' Loads a DeltaTable, returning the result as a SparkDataFrame.
+#'
+#' @param path path of file to read. A vector of multiple paths is allowed.
+#' @param ... additional data source specific named properties.
+#' @rdname read.delta
+#' @name read.delta
+#' @note read.delta since 1.0.0
+#' @examples
+#' \dontrun{
+#' read.delta("/tmp/iris-delta")
+#' }
+#' @export
+#' @seealso dlt_read
+read.delta <- function(path, ...) {
+  dlt_read(path, ...)
+}
+
+
 #' Write SparkDataFrame to Delta
 #'
 #' Writes SparkDataFrame to Delta.
@@ -59,5 +79,32 @@ setMethod(
   signature(df = "SparkDataFrame", path = "character"),
   function(df, path, ...) {
     SparkR::write.df(df, path = path, source = "delta", ...)
+  }
+)
+
+
+#' Write SparkDataFrame to Delta
+#'
+#' Writes SparkDataFrame to Delta.
+#'
+#' @param df SparkDataFrame
+#' @param path character path to write the data.
+#' @param ... additional arguments passed to writer
+#' @rdname write.delta
+#' @name write.delta
+#' @aliases write.delta,SparkDataFrame,character-method
+#' @examples
+#' \dontrun{
+#' SparkR::createDataFrame(iris) %>%
+#'   write.delta("/tmp/iris-delta")
+#' }
+#' @export
+#' @note write.delta since 1.0.0
+#' @seealso dlt_write
+setMethod(
+  "write.delta",
+  signature(df = "SparkDataFrame", path = "character"),
+  function(df, path, ...) {
+    dlt_write(df, path, ...)
   }
 )
