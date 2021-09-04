@@ -30,3 +30,21 @@ test_that("can write and read back", {
     )
   })
 })
+
+
+test_that("can write and read back with compatibility aliases", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    expected <- SparkR::sql("SELECT * FROM range(10)")
+
+    expected %>%
+      write.delta(path)
+
+    actual <- read.delta(path)
+
+    expect_sdf_equivalent(
+      actual, expected
+    )
+  })
+})
