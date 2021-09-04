@@ -14,22 +14,13 @@
 # limitations under the License.
 #
 
-#' @name dlt_write
-#' @rdname dlt_write
-setGeneric("dlt_write", function(df, path, ...) {
-  standardGeneric("dlt_write")
-})
-
-
-#' @name write.delta
-#' @rdname write.delta
-setGeneric("write.delta", function(df, path, ...) {
-  standardGeneric("write.delta")
-})
-
-
-#' @name dlt_to_df
-#' @rdname dlt_to_df
-setGeneric("dlt_to_df", function(dt) {
-  standardGeneric("dlt_to_df")
-})
+#' invoke DeltaTable static methods
+#'
+#' @noRd
+invoke_delta_table_static <- function(method, ...) {
+  sparkR.callJStatic(
+    "io.delta.tables.DeltaTable",
+    method,
+    ...
+  )
+}

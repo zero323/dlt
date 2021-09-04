@@ -22,5 +22,15 @@
 NULL
 
 
-#' @importClassesFrom SparkR SparkDataFrame
+#' @importFrom methods new
 NULL
+
+
+#' @importClassesFrom SparkR Column SparkDataFrame
+NULL
+
+
+#' @importFrom SparkR sparkR.callJMethod sparkR.callJStatic
+NULL
+
+globalVariables(".")
