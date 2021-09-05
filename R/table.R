@@ -113,3 +113,57 @@ setMethod(
     )
   }
 )
+
+
+#' Delete data from this DataTable
+#'
+#' Removes data that matches optional condition
+#'
+#' @param dt DeltaTable
+#' @param condition optional, character of Column
+#'   If character, interpreted as SQL expression
+#'
+#' @name dlt_delete
+#' @rdname dlt_delete
+#' @aliases dlt_delete,DeltaTable,missing-method
+#'
+#' @export
+#' @note dlt_delete, since 1.0.0
+setMethod(
+  "dlt_delete",
+  signature(dt = "DeltaTable", condition = "missing"),
+  function(dt) {
+    sparkR.callJMethod(dt@jdt, "delete") %>%
+      invisible()
+  }
+)
+
+
+#' @rdname dlt_delete
+#' @aliases dlt_delete,DeltaTable,Column-method
+#'
+#' @export
+setMethod(
+  "dlt_delete",
+  signature(dt = "DeltaTable", condition = "Column"),
+  function(dt, condition) {
+    sparkR.callJMethod(
+      dt@jdt,
+      "delete",
+      condition@jc
+    ) %>% invisible()
+  }
+)
+
+
+#' @rdname dlt_delete
+#' @aliases dlt_delete,DeltaTable,character-method
+#'
+#' @export
+setMethod(
+  "dlt_delete",
+  signature(dt = "DeltaTable", condition = "character"),
+  function(dt, condition) {
+    dlt_delete(dt, SparkR::expr(condition))
+  }
+)

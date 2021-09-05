@@ -40,3 +40,10 @@ setGeneric("dlt_to_df", function(dt) {
 setGeneric("dlt_alias", function(dt, name) {
   standardGeneric("dlt_alias")
 })
+
+
+#' @name dlt_delete
+#' @rdname dlt_delete
+setGeneric("dlt_delete", function(dt, condition) {
+  standardGeneric("dlt_delete")
+})
