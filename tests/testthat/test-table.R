@@ -64,3 +64,66 @@ test_that("can alias", {
       expect_s4_class("SparkDataFrame")
   })
 })
+
+
+test_that("can delete all from table", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    tbl <- dlt_for_path(path)
+
+    tbl %>%
+      dlt_to_df() %>%
+      SparkR::count() %>%
+      expect_equal(SparkR::count(test_data()))
+
+    tbl %>%
+      dlt_delete()
+
+    tbl %>%
+      dlt_to_df() %>%
+      SparkR::count() %>%
+      expect_equal(0)
+  })
+})
+
+
+test_that("can delete with condition from table", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    tbl <- dlt_for_path(path)
+
+    cond1 <- "key = 'b'"
+
+    tbl %>%
+      dlt_delete(cond1)
+
+    expected1 <- test_data() %>%
+      SparkR::where(!SparkR::expr(cond1))
+
+    tbl %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected1)
+
+    cond2 <- SparkR::column("ind") == -1 & SparkR::column("long") < 0
+
+    tbl %>%
+      dlt_delete(cond2)
+
+    expected2 <- expected1 %>%
+      SparkR::where(!cond2)
+
+    tbl %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected2)
+  })
+})
+
+
