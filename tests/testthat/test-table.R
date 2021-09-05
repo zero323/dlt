@@ -48,3 +48,19 @@ test_that("can load with dlt_for_name", {
     dlt_to_df() %>%
     expect_sdf_equivalent(expected)
 })
+
+
+test_that("can alias", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    dlt_for_path(path) %>%
+      dlt_alias("this_table") %>%
+      dlt_to_df() %>%
+      SparkR::select("this_table.id") %>%
+      expect_s4_class("SparkDataFrame")
+  })
+})
