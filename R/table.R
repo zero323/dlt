@@ -89,3 +89,27 @@ dlt_for_path <- function(path) {
     )
   )
 }
+
+
+#' Set alias for this DeltaTable
+#'
+#' @param dt DeltaTable
+#' @param name character
+#' @returns DeltaTable
+#'
+#' @name dlt_alias
+#' @rdname dlt_alias
+#' @aliases dlt_alias,DeltaTable,character-method
+#'
+#' @export
+#' @note dlt_alias, since 1.0.0
+setMethod(
+  "dlt_alias",
+  signature(dt = "DeltaTable", name = "character"),
+  function(dt, name) {
+    new(
+      "DeltaTable",
+      jdt = sparkR.callJMethod(dt@jdt, "alias", name)
+    )
+  }
+)

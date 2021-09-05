@@ -33,3 +33,10 @@ setGeneric("write.delta", function(df, path, ...) {
 setGeneric("dlt_to_df", function(dt) {
   standardGeneric("dlt_to_df")
 })
+
+
+#' @name dlt_alias
+#' @rdname dlt_alias
+setGeneric("dlt_alias", function(dt, name) {
+  standardGeneric("dlt_alias")
+})
