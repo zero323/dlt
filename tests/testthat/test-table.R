@@ -127,3 +127,62 @@ test_that("can delete with condition from table", {
 })
 
 
+test_that("can update table", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    tbl <- dlt_for_path(path)
+
+    lat1 <- "0"
+    long1 <- "0"
+
+    tbl %>%
+      dlt_update(c("long" = lat1, lat = long1))
+
+    expected1 <- test_data() %>%
+      SparkR::withColumn("long", SparkR::expr(lat1)) %>%
+      SparkR::withColumn("lat", SparkR::expr(long1))
+
+    tbl %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected1)
+
+
+    cond1 <- SparkR::column("key") == "a"
+    lat2 <- SparkR::lit(42)
+
+    tbl %>%
+      dlt_update(list(lat = lat2), cond1)
+
+    expected2 <- expected1 %>%
+      SparkR::withColumn(
+        "lat",
+        SparkR::when(cond1, lat2) %>%
+          SparkR::otherwise(SparkR::column("lat"))
+      )
+
+    tbl %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected2)
+
+    cond2 <- "key = 'b'"
+    long2 <- "long - 1"
+
+    tbl %>%
+      dlt_update(list(long = long2), cond2)
+
+    expected3 <- expected2 %>%
+      SparkR::withColumn(
+        "long",
+        SparkR::when(SparkR::expr(cond2), SparkR::expr(long2)) %>%
+          SparkR::otherwise(SparkR::column("long"))
+      )
+
+    tbl %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected3)
+  })
+})
