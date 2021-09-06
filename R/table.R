@@ -14,7 +14,12 @@
 # limitations under the License.
 #
 
+#' @include generics.R utils.R
+NULL
+
 setOldClass("jobj")
+
+setClassUnion("characterOrList", members = c("character", "list"))
 
 
 #' S4 class that represents DeltaTable
@@ -165,5 +170,73 @@ setMethod(
   signature(dt = "DeltaTable", condition = "character"),
   function(dt, condition) {
     dlt_delete(dt, SparkR::expr(condition))
+  }
+)
+
+
+#' Update data in this DataTable
+#'
+#' @param dt DeltaTable
+#' @param set named character vector or list of Columns
+#' @param condition optional, character or Column
+#'
+#' @name dlt_update
+#' @rdname dlt_update
+#' @aliases dlt_update,DeltaTable,characterOrList,missing-method
+#'
+#' @export
+#' @note dlt_update, since 1.0.0
+setMethod(
+  "dlt_update",
+  signature(
+    dt = "DeltaTable",
+    set = "characterOrList",
+    condition = "missing"
+  ),
+  function(dt, set) {
+    sparkR.callJMethod(
+      dt@jdt,
+      "update",
+      to_expression_env(set)
+    ) %>% invisible()
+  }
+)
+
+
+#' @rdname dlt_update
+#' @aliases dlt_update,DeltaTable,characterOrList,Column-method
+#'
+#' @export
+setMethod(
+  "dlt_update",
+  signature(
+    dt = "DeltaTable",
+    set = "characterOrList",
+    condition = "Column"
+  ),
+  function(dt, set, condition) {
+    sparkR.callJMethod(
+      dt@jdt,
+      "update",
+      condition@jc,
+      to_expression_env(set)
+    ) %>% invisible()
+  }
+)
+
+
+#' @rdname dlt_update
+#' @aliases dlt_update,DeltaTable,characterOrList,character-method
+#'
+#' @export
+setMethod(
+  "dlt_update",
+  signature(
+    dt = "DeltaTable",
+    set = "characterOrList",
+    condition = "character"
+  ),
+  function(dt, set, condition) {
+    dlt_update(dt, set, SparkR::expr(condition))
   }
 )

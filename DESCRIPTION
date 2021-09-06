@@ -25,5 +25,5 @@ Collate:
     'generics.R'
     'package.R'
     'readwrite.R'
-    'table.R'
     'utils.R'
+    'table.R'

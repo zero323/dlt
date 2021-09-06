@@ -47,3 +47,10 @@ setGeneric("dlt_alias", function(dt, name) {
 setGeneric("dlt_delete", function(dt, condition) {
   standardGeneric("dlt_delete")
 })
+
+
+#' @name dlt_update
+#' @rdname dlt_update
+setGeneric("dlt_update", function(dt, set, condition) {
+  standardGeneric("dlt_update")
+})

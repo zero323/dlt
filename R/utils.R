@@ -24,3 +24,37 @@ invoke_delta_table_static <- function(method, ...) {
     ...
   )
 }
+
+
+#' Prepare list of Column objects, given named character vector or Column list
+#'
+#' @noRd
+to_column_list <- function(x) {
+  stopifnot(is.character(x) || is.list(x))
+  stopifnot(!is.null(names(x)) || length(x) == 0)
+  stopifnot(all(!is.na(names(x))))
+
+
+  lapply(x, function(x) {
+    if (is.character(x)) {
+      SparkR::expr(x)
+    } else if ("Column" %in% class(x)) {
+      x
+    } else {
+      stop(paste(
+        "elements of x have to be character or Column, got",
+        paste(class(x), collapse = ",")
+      ))
+    }
+  })
+}
+
+
+#' Prepare environment of Java Columns, given list of Column
+#'
+#' @noRd
+to_expression_env <- function(x) {
+  to_column_list(x) %>%
+    lapply(function(x) x@jc) %>%
+    as.environment()
+}
