@@ -54,3 +54,10 @@ setGeneric("dlt_delete", function(dt, condition) {
 setGeneric("dlt_update", function(dt, set, condition) {
   standardGeneric("dlt_update")
 })
+
+
+#' @name dlt_is_delta_table
+#' @rdname dlt_is_delta_table
+setGeneric("dlt_is_delta_table", function(identifier) {
+  standardGeneric("dlt_is_delta_table")
+})

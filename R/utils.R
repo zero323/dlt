@@ -58,3 +58,11 @@ to_expression_env <- function(x) {
     lapply(function(x) x@jc) %>%
     as.environment()
 }
+
+
+#' return the SparkSession
+#'
+#' @noRd
+active_session <- function() {
+  SparkR::sparkR.session()
+}

@@ -240,3 +240,29 @@ setMethod(
     dlt_update(dt, set, SparkR::expr(condition))
   }
 )
+
+
+#' Check if path corresponds to a DeltaTable
+#'
+#' @param identifier character path
+#' @returns logical
+#'
+#' @name dlt_is_delta_table
+#' @rdname dlt_is_delta_table
+#' @aliases dlt_is_delta_table,character-method
+#'
+#' @export
+#' @note dlt_is_delta_table, since 1.0.0
+setMethod(
+  "dlt_is_delta_table",
+  signature(identifier = "character"),
+  function(identifier) {
+    invoke_delta_table_static(
+      "isDeltaTable",
+      active_session(),
+      identifier
+    )
+  }
+)
+
+
