@@ -186,3 +186,31 @@ test_that("can update table", {
       expect_sdf_equivalent(expected3)
   })
 })
+
+
+test_that("can check if delta is delta", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    path %>%
+      dlt_is_delta_table() %>%
+      expect_true()
+  })
+})
+
+
+test_that("can check if not-delta is not-delta", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      SparkR::write.parquet(path)
+
+    path %>%
+      dlt_is_delta_table() %>%
+      expect_false()
+  })
+})
