@@ -214,3 +214,34 @@ test_that("can check if not-delta is not-delta", {
       expect_false()
   })
 })
+
+
+test_that("can query history", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    tbl <- dlt_for_path(path)
+
+    tbl %>%
+      dlt_history() %>%
+      expect_s4_class("SparkDataFrame") %>%
+      SparkR::count() %>%
+      expect_equal(1)
+
+    tbl %>%
+      dlt_delete()
+
+    tbl %>%
+      dlt_history() %>%
+      SparkR::count() %>%
+      expect_equal(2)
+
+    tbl %>%
+      dlt_history(1) %>%
+      SparkR::count() %>%
+      expect_equal(1)
+  })
+})
