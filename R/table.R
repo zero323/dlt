@@ -266,3 +266,43 @@ setMethod(
 )
 
 
+#' Get commit history for this DeltaTable
+#'
+#' @param dt DeltaTable
+#' @param limit optional, numeric
+#' @returns SparkDataFrame
+#'
+#' @name dlt_history
+#' @rdname dlt_history
+#' @aliases dlt_history,DeltaTable,missing-method
+#'
+#' @export
+#' @note dlt_history, since 1.0.0
+setMethod(
+  "dlt_history",
+  signature(dt = "DeltaTable", limit = "missing"),
+  function(dt) {
+    new(
+      "SparkDataFrame",
+      sparkR.callJMethod(dt@jdt, "history"),
+      FALSE
+    )
+  }
+)
+
+
+#' @rdname dlt_history
+#' @aliases dlt_history,DeltaTable,numeric-method
+#'
+#' @export
+setMethod(
+  "dlt_history",
+  signature(dt = "DeltaTable", limit = "numeric"),
+  function(dt, limit) {
+    new(
+      "SparkDataFrame",
+      sparkR.callJMethod(dt@jdt, "history", as.integer(limit)),
+      FALSE
+    )
+  }
+)

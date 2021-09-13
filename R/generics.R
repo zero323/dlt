@@ -61,3 +61,10 @@ setGeneric("dlt_update", function(dt, set, condition) {
 setGeneric("dlt_is_delta_table", function(identifier) {
   standardGeneric("dlt_is_delta_table")
 })
+
+
+#' @name dlt_history
+#' @rdname dlt_history
+setGeneric("dlt_history", function(dt, limit) {
+  standardGeneric("dlt_history")
+})
