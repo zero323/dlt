@@ -245,3 +245,70 @@ test_that("can query history", {
       expect_equal(1)
   })
 })
+
+
+test_that("can convert to delta", {
+  skip_if(
+    toupper(Sys.getenv("DLT_TESTTHAT_SKIP_SLOW")) == "TRUE",
+    "DLT_TESTTHAT_SKIP_SLOW is TRUE"
+  )
+
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      SparkR::write.parquet(path)
+
+    expect_error(
+      dlt_for_path(path)
+    )
+
+    dlt_convert_to_delta(paste0("parquet.`", path, "`"))
+
+    path %>%
+      dlt_is_delta_table() %>%
+      expect_true()
+
+    path %>%
+      dlt_for_path() %>%
+      expect_s4_class("DeltaTable")
+  })
+})
+
+
+test_that("can convert to delta with partitions", {
+  skip_if(
+    toupper(Sys.getenv("DLT_TESTTHAT_SKIP_SLOW")) == "TRUE",
+    "DLT_TESTTHAT_SKIP_SLOW is TRUE"
+  )
+
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      SparkR::write.df(path, partitionBy = "key", source = "parquet")
+
+    expect_error(
+      dlt_for_path(path)
+    )
+
+    dlt_convert_to_delta(paste0("parquet.`", path, "`"), "key string")
+
+    path %>%
+      dlt_is_delta_table() %>%
+      expect_true()
+
+    path %>%
+      dlt_for_path() %>%
+      expect_s4_class("DeltaTable")
+
+    path %>%
+      dlt_for_path() %>%
+      dlt_history() %>%
+      SparkR::filter(
+        SparkR::expr("operationParameters['partitionedBy']") == '["key"]'
+      ) %>%
+      SparkR::count() %>%
+      expect_gt(0)
+  })
+})
