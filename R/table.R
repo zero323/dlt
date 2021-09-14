@@ -306,3 +306,64 @@ setMethod(
     )
   }
 )
+
+
+#' Create a DeltaTable from the given parquet table.
+#'
+#' @param identifier character
+#' @param partition_schema optional, character
+#' @returns DeltaTable
+#'
+#' @name dlt_convert_to_delta
+#' @rdname dlt_convert_to_delta
+#' @aliases dlt_convert_to_delta,character,missing-method
+#' @examples
+#' \dontrun{
+#' library(SparkR)
+#' createDataFrame(iris) %>%
+#'   write.parquet("/tmp/iris-non-delta")
+#'
+#' dlt_convert_to_delta("parquet.`/tmp/iris-non-delta`") %>%
+#'   dlt_to_df() %>%
+#'   showDF()
+#' }
+#'
+#' @export
+#' @note dlt_convert_to_delta, since 1.0.0
+setMethod(
+  "dlt_convert_to_delta",
+  signature(identifier = "character", partition_schema = "missing"),
+  function(identifier) {
+    new(
+      "DeltaTable",
+      jdt = invoke_delta_table_static(
+        "convertToDelta",
+        active_session(),
+        identifier
+      )
+    )
+  }
+)
+
+
+#' @rdname dlt_convert_to_delta
+#' @aliases dlt_convert_to_delta,character,character-method
+#'
+#' @export
+setMethod(
+  "dlt_convert_to_delta",
+  signature(identifier = "character", partition_schema = "character"),
+  function(identifier, partition_schema) {
+    new(
+      "DeltaTable",
+      jdt = invoke_delta_table_static(
+        "convertToDelta",
+        active_session(),
+        identifier,
+        partition_schema
+      )
+    )
+  }
+)
+
+

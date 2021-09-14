@@ -68,3 +68,10 @@ setGeneric("dlt_is_delta_table", function(identifier) {
 setGeneric("dlt_history", function(dt, limit) {
   standardGeneric("dlt_history")
 })
+
+
+#' @name dlt_convert_to_delta
+#' @rdname dlt_convert_to_delta
+setGeneric("dlt_convert_to_delta", function(identifier, partition_schema) {
+  standardGeneric("dlt_convert_to_delta")
+})
