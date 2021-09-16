@@ -312,3 +312,46 @@ test_that("can convert to delta with partitions", {
       expect_gt(0)
   })
 })
+
+
+test_that("can vaccuum", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    tbl <- dlt_for_path(path)
+
+    files <- list.files(path, pattern = "*.parquet")
+
+    tbl %>%
+      dlt_delete()
+
+    tbl %>%
+      dlt_vacuum()
+
+    # Shouldn't remove files with default retention
+    list.files(path, pattern = "*.parquet") %>%
+      expect_equal(files)
+
+    set_spark_config(
+      "spark.databricks.delta.retentionDurationCheck.enabled",
+      "false"
+    )
+
+    withr::defer(
+      set_spark_config(
+        "spark.databricks.delta.retentionDurationCheck.enabled",
+        "true"
+      )
+    )
+
+    tbl %>%
+      dlt_vacuum(0)
+
+    list.files(path, pattern = "*.parquet") %>%
+      length() %>%
+      expect_equal(0)
+  })
+})

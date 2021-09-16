@@ -28,3 +28,23 @@ delta_test_tempfile <- function() {
 delta_test_name <- function(prefix = "delta_test") {
   paste(prefix, stringi::stri_rand_strings(1, 10), sep = "_")
 }
+
+
+#' Set Spark configuration
+#'
+#' @noRd
+set_spark_config <- function(key, value) {
+  active_session() %>%
+    SparkR::sparkR.callJMethod("conf") %>%
+    SparkR::sparkR.callJMethod("set", key, value)
+}
+
+
+#' Unset Spark configuration
+#'
+#' @noRd
+unset_spark_config <- function(key) {
+  active_session() %>%
+    SparkR::sparkR.callJMethod("conf") %>%
+    SparkR::sparkR.callJMethod("unset", key)
+}
