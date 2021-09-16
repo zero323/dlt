@@ -75,3 +75,10 @@ setGeneric("dlt_history", function(dt, limit) {
 setGeneric("dlt_convert_to_delta", function(identifier, partition_schema) {
   standardGeneric("dlt_convert_to_delta")
 })
+
+
+#' @name dlt_vacuum
+#' @rdname dlt_vacuum
+setGeneric("dlt_vacuum", function(dt, retention_hours) {
+  standardGeneric("dlt_vacuum")
+})

@@ -367,3 +367,37 @@ setMethod(
 )
 
 
+#' Vacuum this DeltaTable
+#'
+#' @param dt DataTable
+#' @param retention_hours numeric
+#' @returns NULL, invisibly
+#'
+#' @name dlt_vacuum
+#' @rdname dlt_vacuum
+#' @aliases dlt_vacuum,DeltaTable,missing-method
+#'
+#' @export
+#' @note dlt_vacuum, since 1.0.0
+setMethod(
+  "dlt_vacuum",
+  signature(dt = "DeltaTable", retention_hours = "missing"),
+  function(dt) {
+    sparkR.callJMethod(dt@jdt, "vacuum") %>%
+      invisible()
+  }
+)
+
+
+#' @rdname dlt_vacuum
+#' @aliases dlt_vacuum,DeltaTable,numeric-method
+#'
+#' @export
+setMethod(
+  "dlt_vacuum",
+  signature(dt = "DeltaTable", retention_hours = "numeric"),
+  function(dt, retention_hours) {
+    sparkR.callJMethod(dt@jdt, "vacuum", as.double(retention_hours)) %>% invisible()
+  }
+)
+
