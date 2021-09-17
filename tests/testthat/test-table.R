@@ -355,3 +355,44 @@ test_that("can vaccuum", {
       expect_equal(0)
   })
 })
+
+
+test_that("can update protocol", {
+  path <- delta_test_tempfile()
+
+
+  set_spark_config(
+    "spark.databricks.delta.minReaderVersion", "1"
+  )
+  set_spark_config(
+    "spark.databricks.delta.minWriterVersion", "2"
+  )
+
+
+  withr::defer({
+    unset_spark_config(
+      "spark.databricks.delta.minReaderVersion"
+    )
+    unset_spark_config(
+      "spark.databricks.delta.minWriterVersion"
+    )
+  })
+
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    tbl <- dlt_for_path(path)
+
+    # Should pass
+    expect_null(
+      dlt_upgrade_table_protocol(tbl, 1, 3)
+    )
+
+    # Should fail on attempted downgrade
+    expect_error(
+      dlt_upgrade_table_protocol(tbl, 1, 2)
+    )
+  })
+})
