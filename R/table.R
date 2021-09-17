@@ -401,3 +401,32 @@ setMethod(
   }
 )
 
+
+#' Upgrade protocol version of this DeltaTable
+#'
+#' @param dt DeltaTable
+#' @param reader_version numeric
+#' @param writer_version numeric
+#' @returns NULL, invisibly
+#'
+#' @name dlt_upgrade_table_protocol
+#' @rdname dlt_upgrade_table_protocol
+#' @aliases dlt_upgrade_table_protocol,DeltaTable,numeric,numeric-method
+#'
+#' @export
+#' @note dlt_upgrade_table_protocol, since 1.0.0
+setMethod(
+  "dlt_upgrade_table_protocol",
+  signature(dt = "DeltaTable", reader_version = "numeric", writer_version = "numeric"),
+  function(dt, reader_version, writer_version) {
+    stopifnot(round(reader_version) == reader_version)
+    stopifnot(round(writer_version) == writer_version)
+
+    sparkR.callJMethod(
+      dt@jdt,
+      "upgradeTableProtocol",
+      as.integer(reader_version),
+      as.integer(writer_version)
+    ) %>% invisible()
+  }
+)

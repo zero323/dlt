@@ -82,3 +82,10 @@ setGeneric("dlt_convert_to_delta", function(identifier, partition_schema) {
 setGeneric("dlt_vacuum", function(dt, retention_hours) {
   standardGeneric("dlt_vacuum")
 })
+
+
+#' @name dlt_upgrade_table_protocol
+#' @rdname dlt_upgrade_table_protocol
+setGeneric("dlt_upgrade_table_protocol", function(dt, reader_version, writer_version) {
+  standardGeneric("dlt_upgrade_table_protocol")
+})
