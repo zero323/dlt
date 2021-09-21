@@ -430,3 +430,27 @@ setMethod(
     ) %>% invisible()
   }
 )
+
+
+#' Generate manifest files for this DeltaTable
+#'
+#' @param dt DeltaTable
+#' @param mode character mode for the type of manifest file to be generated
+#'
+#' @name dlt_generate_manifest
+#' @rdname dlt_generate_manifest
+#' @aliases dlt_generate_manifest,DeltaTable,character-method
+#'
+#' @export
+#' @note dlt_generate_manifest, since 1.0.0
+setMethod(
+  "dlt_generate_manifest",
+  signature(dt = "DeltaTable", mode = "character"),
+  function(dt, mode = c("symlink_format_manifest")) {
+    sparkR.callJMethod(
+      dt@jdt,
+      "generate",
+      match.arg(mode)
+    ) %>% invisible()
+  }
+)

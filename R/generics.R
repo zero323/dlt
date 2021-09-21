@@ -89,3 +89,10 @@ setGeneric("dlt_vacuum", function(dt, retention_hours) {
 setGeneric("dlt_upgrade_table_protocol", function(dt, reader_version, writer_version) {
   standardGeneric("dlt_upgrade_table_protocol")
 })
+
+
+#' @name dlt_generate_manifest
+#' @rdname dlt_generate_manifest
+setGeneric("dlt_generate_manifest", function(dt, mode) {
+  standardGeneric("dlt_generate_manifest")
+})
