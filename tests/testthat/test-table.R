@@ -396,3 +396,27 @@ test_that("can update protocol", {
     )
   })
 })
+
+
+test_that("can generate symlink manifest", {
+  skip_if(
+    toupper(Sys.getenv("DLT_TESTTHAT_SKIP_SLOW")) == "TRUE",
+    "DLT_TESTTHAT_SKIP_SLOW is TRUE"
+  )
+
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    path %>%
+      dlt_for_path() %>%
+      dlt_generate_manifest("symlink_format_manifest")
+
+    path %>%
+      file.path("_symlink_format_manifest", "manifest") %>%
+      file.exists() %>%
+      expect_true()
+  })
+})
