@@ -67,3 +67,105 @@ test_that("can execute merge with basic update", {
       expect_sdf_equivalent(expected)
   })
 })
+
+
+test_that("can execute merge with update on condition", {
+  path <- delta_test_tempfile()
+
+  source <- test_data("source", TRUE)
+
+  expected_long <- SparkR::coalesce(
+    SparkR::column("source.long"), SparkR::column("target.long")
+  ) %>%
+    SparkR::alias("long")
+
+  preserved_columns <- c(
+    "id", "key", "val", "ind", "category", "lat"
+  )
+
+  expected <- test_data("target", TRUE) %>%
+    SparkR::join(
+      source,
+      SparkR::expr("source.id = target.id") & SparkR::column("target.ind") == -1,
+      "left"
+    ) %>%
+    SparkR::select(c(
+      to_fully_qualified_columns(preserved_columns, "target"),
+      expected_long
+    ))
+
+  # With Column condition and Column set
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(source, "source.id = target.id") %>%
+      dlt_when_matched_update(
+        list(long = SparkR::column("source.long")),
+        SparkR::column("target.ind") == -1
+      ) %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+
+  # With character condition and character set
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(
+        source,
+        SparkR::column("source.id") == SparkR::column("target.id")
+      ) %>%
+      dlt_when_matched_update(
+        c(long = "source.long"),
+        "target.ind == -1"
+      ) %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+
+  # With Column condition and character set
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    target <- dlt_for_path(path) %>%
+      dlt_alias("target")
+
+    target %>%
+      dlt_merge(source, "source.id = target.id") %>%
+      dlt_when_matched_update(
+        list(long = "source.long"),
+        SparkR::column("target.ind") == -1
+      ) %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+
+  # With character condition and Column set
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(source, "source.id = target.id") %>%
+      dlt_when_matched_update(
+        list(long = SparkR::column("source.long")),
+        "target.ind = -1"
+      ) %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+})
