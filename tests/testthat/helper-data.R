@@ -32,3 +32,15 @@ test_data <- function(name = c("target", "source"), alias = FALSE) {
     SparkR::read.parquet() %>%
     finalize()
 }
+
+
+#' Write test target to delta and return corresponding delta table
+#'
+#' @noRd
+test_path_target <- function(path) {
+  test_data() %>%
+    dlt_write(path)
+
+  dlt_for_path(path) %>%
+    dlt_alias("target")
+}

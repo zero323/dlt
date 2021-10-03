@@ -48,3 +48,12 @@ unset_spark_config <- function(key) {
     SparkR::sparkR.callJMethod("conf") %>%
     SparkR::sparkR.callJMethod("unset", key)
 }
+
+
+#' Convert list of character names to list of Columns with given table alias
+#'
+#' @noRd
+to_fully_qualified_columns <- function(x, alias) {
+  paste(alias, x, sep = ".") %>%
+    lapply(SparkR::column)
+}
