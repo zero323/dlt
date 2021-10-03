@@ -23,7 +23,8 @@ RoxygenNote: 7.1.2
 Config/testthat/edition: 3
 Collate: 
     'generics.R'
-    'package.R'
-    'readwrite.R'
     'utils.R'
     'table.R'
+    'merge.R'
+    'package.R'
+    'readwrite.R'

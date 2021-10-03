@@ -96,3 +96,30 @@ setGeneric("dlt_upgrade_table_protocol", function(dt, reader_version, writer_ver
 setGeneric("dlt_generate_manifest", function(dt, mode) {
   standardGeneric("dlt_generate_manifest")
 })
+
+
+#' @name dlt_merge
+#' @rdname dlt_merge
+setGeneric("dlt_merge", function(dt, source, condition) {
+  standardGeneric("dlt_merge")
+})
+
+
+#' @name dlt_execute
+#' @rdname dlt_execute
+setGeneric(
+  "dlt_execute",
+  function(bldr) {
+    standardGeneric("dlt_execute")
+  }
+)
+
+
+#' @name dlt_when_matched_update
+#' @rdname dlt_when_matched_update
+setGeneric(
+  "dlt_when_matched_update",
+  function(dmb, set, condition) {
+    standardGeneric("dlt_when_matched_update")
+  }
+)

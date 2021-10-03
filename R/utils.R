@@ -66,3 +66,35 @@ to_expression_env <- function(x) {
 active_session <- function() {
   SparkR::sparkR.session()
 }
+
+
+#' Check if argument is a scalar-like character
+#'
+#' @noRd
+is_scalar_like_character <- function(x) {
+  is.character(x) && !is.na(x) && length(x) == 1
+}
+
+
+#' Validate if argument is a scalar-like character
+#'
+#' @noRd
+validate_is_scalar_like_character <- function(x, nullable = FALSE) {
+  stopifnot(
+    (nullable && is.null(x)) || is_scalar_like_character(x)
+  )
+}
+
+
+#' prepare ... cols
+#'
+#' @noRd
+prepare_and_validate_cols <- function(...) {
+  cols <- list(...)
+
+  sapply(cols, is_scalar_like_character) %>%
+    all() %>%
+    stopifnot()
+
+  cols
+}

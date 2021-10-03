@@ -454,3 +454,50 @@ setMethod(
     ) %>% invisible()
   }
 )
+
+
+#' Merge data from sourc with this DataTable, based on condition
+#'
+#' @param dt DeltaTable
+#' @param source SparkDataFrame
+#' @param condition character or Column
+#'
+#' @name dlt_merge
+#' @rdname dlt_merge
+#' @aliases dlt_merge,DeltaTable,SparkDataFrame,Column-method
+#'
+#' @export
+#' @note dlt_merge, since 1.0.0
+setMethod(
+  "dlt_merge",
+  signature(
+    dt = "DeltaTable",
+    source = "SparkDataFrame",
+    condition = "Column"
+  ),
+  function(dt, source, condition) {
+    sparkR.callJMethod(
+      dt@jdt,
+      "merge",
+      source@sdf,
+      condition@jc
+    ) %>% newDeltaMergeBuilder()
+  }
+)
+
+
+#' @rdname dlt_merge
+#' @aliases dlt_merge,DeltaTable,SparkDataFrame,character-method
+#'
+#' @export
+setMethod(
+  "dlt_merge",
+  signature(
+    dt = "DeltaTable",
+    source = "SparkDataFrame",
+    condition = "character"
+  ),
+  function(dt, source, condition) {
+    dlt_merge(dt, source, SparkR::expr(condition))
+  }
+)
