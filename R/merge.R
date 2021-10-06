@@ -111,3 +111,57 @@ setMethod(
     dlt_when_matched_update(dmb, set, SparkR::expr(condition))
   }
 )
+
+
+#' Update all columns of the matched table
+#'
+#' @param dmb DeltaMergeBuilder
+#' @param condition optional, character or Column
+#' @returns DeltaMergeBuilder
+#'
+#' @name dlt_when_matched_update_all
+#' @rdname dlt_when_matched_update_all
+#' @aliases dlt_when_matched_update_all,DeltaMergeBuilder,missing-method
+#'
+#' @export
+#' @note dlt_when_matched_update_all, since 1.0.0
+setMethod(
+  "dlt_when_matched_update_all",
+  signature(dmb = "DeltaMergeBuilder", condition = "missing"),
+  function(dmb) {
+    sparkR.callJMethod(dmb@jmb, "whenMatched") %>%
+      sparkR.callJMethod("updateAll") %>%
+      newDeltaMergeBuilder()
+  }
+)
+
+
+#' @rdname dlt_when_matched_update_all
+#' @aliases dlt_when_matched_update_all,DeltaMergeBuilder,Column-method
+#'
+#' @export
+setMethod(
+  "dlt_when_matched_update_all",
+  signature(dmb = "DeltaMergeBuilder", condition = "Column"),
+  function(dmb, condition) {
+    sparkR.callJMethod(dmb@jmb, "whenMatched", condition@jc) %>%
+      sparkR.callJMethod("updateAll") %>%
+      newDeltaMergeBuilder()
+  }
+)
+
+
+#' @rdname dlt_when_matched_update_all
+#' @aliases dlt_when_matched_update_all,DeltaMergeBuilder,character-method
+#'
+#' @export
+setMethod(
+  "dlt_when_matched_update_all",
+  signature(dmb = "DeltaMergeBuilder", condition = "character"),
+  function(dmb, condition) {
+    validate_is_scalar_like_character(condition)
+
+    dlt_when_matched_update_all(dmb, SparkR::expr(condition))
+  }
+)
+

@@ -123,3 +123,13 @@ setGeneric(
     standardGeneric("dlt_when_matched_update")
   }
 )
+
+
+#' @name dlt_when_matched_update_all
+#' @rdname dlt_when_matched_update_all
+setGeneric(
+  "dlt_when_matched_update_all",
+  function(dmb, condition) {
+    standardGeneric("dlt_when_matched_update_all")
+  }
+)
