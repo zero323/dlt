@@ -169,3 +169,46 @@ test_that("can execute merge with update on condition", {
       expect_sdf_equivalent(expected)
   })
 })
+
+
+test_that("can execute merge with basic update all", {
+  path <- delta_test_tempfile()
+
+  source <- test_data("source", TRUE)
+  target <- test_data("target", TRUE)
+
+  cond <- SparkR::expr("source.id = target.id")
+
+  matched <- target %>%
+    SparkR::join(
+      source,
+      cond,
+      "leftanti"
+    )
+
+  not_matched <- source %>%
+    SparkR::join(
+      target,
+      cond,
+      "leftsemi"
+    )
+
+  expected <- matched %>%
+    SparkR::unionAll(not_matched)
+
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(
+        source,
+        SparkR::column("source.id") == SparkR::column("target.id")
+      ) %>%
+      dlt_when_matched_update_all() %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+})
