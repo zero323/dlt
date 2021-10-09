@@ -165,3 +165,62 @@ setMethod(
   }
 )
 
+
+#' Delete row from the table
+#'
+#' @param dmb DeltaMergeBuilder
+#' @param condition optional, character or Column
+#' @returns DeltaMergeBuilder
+#'
+#' @name dlt_when_matched_delete
+#' @rdname dlt_when_matched_delete
+#' @aliases dlt_when_matched_delete,DeltaMergeBuilder,missing-method
+#'
+#' @export
+#' @note dlt_when_matched_delete, since 1.0.0
+setMethod(
+  "dlt_when_matched_delete",
+  signature(dmb = "DeltaMergeBuilder", condition = "missing"),
+  function(dmb) {
+    sparkR.callJMethod(
+      dmb@jmb,
+      "whenMatched"
+    ) %>%
+      sparkR.callJMethod("delete") %>%
+      newDeltaMergeBuilder()
+  }
+)
+
+
+#' @rdname dlt_when_matched_delete
+#' @aliases dlt_when_matched_delete,DeltaMergeBuilder,Column-method
+#'
+#' @export
+setMethod(
+  "dlt_when_matched_delete",
+  signature(dmb = "DeltaMergeBuilder", condition = "Column"),
+  function(dmb, condition) {
+    sparkR.callJMethod(
+      dmb@jmb,
+      "whenMatched",
+      condition@jc
+    ) %>%
+      sparkR.callJMethod("delete") %>%
+      newDeltaMergeBuilder()
+  }
+)
+
+
+#' @rdname dlt_when_matched_delete
+#' @aliases dlt_when_matched_delete,DeltaMergeBuilder,character-method
+#'
+#' @export
+setMethod(
+  "dlt_when_matched_delete",
+  signature(dmb = "DeltaMergeBuilder", condition = "character"),
+  function(dmb, condition) {
+    validate_is_scalar_like_character(condition)
+
+    dlt_when_matched_delete(dmb, SparkR::expr(condition))
+  }
+)

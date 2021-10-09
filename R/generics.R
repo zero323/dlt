@@ -133,3 +133,13 @@ setGeneric(
     standardGeneric("dlt_when_matched_update_all")
   }
 )
+
+
+#' @name dlt_when_matched_delete
+#' @rdname dlt_when_matched_delete
+setGeneric(
+  "dlt_when_matched_delete",
+  function(dmb, condition) {
+    standardGeneric("dlt_when_matched_delete")
+  }
+)
