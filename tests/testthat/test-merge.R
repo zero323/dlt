@@ -306,3 +306,54 @@ test_that("can execute merge with basic delete", {
       expect_sdf_equivalent(expected)
   })
 })
+
+
+test_that("can execute merge with delete on condition", {
+  path <- delta_test_tempfile()
+
+  source <- test_data("source", TRUE)
+
+  expected <- test_data("target", TRUE) %>%
+    SparkR::join(
+      source,
+      SparkR::expr("source.id = target.id AND source.ind != target.ind"),
+      "leftanti"
+    )
+
+  # With character condition
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(
+        source,
+        "source.id = target.id"
+      ) %>%
+      dlt_when_matched_delete("source.ind != target.ind") %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+
+
+  # With column condition
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(
+        source,
+        SparkR::column("source.id") == SparkR::column("target.id")
+      ) %>%
+      dlt_when_matched_delete(
+        SparkR::column("source.ind") != SparkR::column("target.ind")
+      ) %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+})
