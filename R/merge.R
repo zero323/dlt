@@ -285,3 +285,63 @@ setMethod(
     dlt_when_not_matched_insert(dmb, set, SparkR::expr(condition))
   }
 )
+
+
+#' Insert a new row if not source not matched
+#'
+#' @param dmb DeltaMergeBuilder
+#' @param condition optional, character or Column
+#' @returns DeltaMergeBuilder
+#'
+#' @name dlt_when_not_matched_insert_all
+#' @rdname dlt_when_not_matched_insert_all
+#' @aliases dlt_when_not_matched_insert_all,DeltaMergeBuilder,missing-method
+#'
+#' @export
+#' @note dlt_when_not_matched_insert_all, since 1.0.0
+setMethod(
+  "dlt_when_not_matched_insert_all",
+  signature(dmb = "DeltaMergeBuilder", condition = "missing"),
+  function(dmb) {
+    sparkR.callJMethod(
+      dmb@jmb,
+      "whenNotMatched"
+    ) %>%
+      sparkR.callJMethod("insertAll") %>%
+      newDeltaMergeBuilder()
+  }
+)
+
+
+#' @rdname dlt_when_not_matched_insert_all
+#' @aliases dlt_when_not_matched_insert_all,DeltaMergeBuilder,Column-method
+#'
+#' @export
+setMethod(
+  "dlt_when_not_matched_insert_all",
+  signature(dmb = "DeltaMergeBuilder", condition = "Column"),
+  function(dmb, condition) {
+    sparkR.callJMethod(
+      dmb@jmb,
+      "whenNotMatched",
+      condition@jc
+    ) %>%
+      sparkR.callJMethod("insertAll") %>%
+      newDeltaMergeBuilder()
+  }
+)
+
+
+#' @rdname dlt_when_not_matched_insert_all
+#' @aliases dlt_when_not_matched_insert_all,DeltaMergeBuilder,character-method
+#'
+#' @export
+setMethod(
+  "dlt_when_not_matched_insert_all",
+  signature(dmb = "DeltaMergeBuilder", condition = "character"),
+  function(dmb, condition) {
+    validate_is_scalar_like_character(condition)
+
+    dlt_when_not_matched_insert_all(dmb, SparkR::expr(condition))
+  }
+)
