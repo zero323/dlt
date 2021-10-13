@@ -224,3 +224,64 @@ setMethod(
     dlt_when_matched_delete(dmb, SparkR::expr(condition))
   }
 )
+
+
+#' Insert a new row based the set of rules
+#'
+#' @param dmb DeltaMergeBuilder
+#' @param set character or list
+#' @param condition optional, character or Column
+#' @returns DeltaMergeBuilder
+#'
+#' @name dlt_when_not_matched_insert
+#' @rdname dlt_when_not_matched_insert
+#' @aliases dlt_when_not_matched_insert,DeltaMergeBuilder,characterOrList,missing-method
+#'
+#' @export
+#' @note dlt_when_not_matched_insert, since 1.0.0
+setMethod(
+  "dlt_when_not_matched_insert",
+  signature(dmb = "DeltaMergeBuilder", set = "characterOrList", condition = "missing"),
+  function(dmb, set) {
+    sparkR.callJMethod(
+      dmb@jmb,
+      "whenNotMatched"
+    ) %>%
+      sparkR.callJMethod("insert", to_expression_env(set)) %>%
+      newDeltaMergeBuilder()
+  }
+)
+
+
+#' @rdname dlt_when_not_matched_insert
+#' @aliases dlt_when_not_matched_insert,DeltaMergeBuilder,characterOrList,Column-method
+#'
+#' @export
+setMethod(
+  "dlt_when_not_matched_insert",
+  signature(dmb = "DeltaMergeBuilder", set = "characterOrList", condition = "Column"),
+  function(dmb, set, condition) {
+    sparkR.callJMethod(
+      dmb@jmb,
+      "whenNotMatched",
+      condition@jc
+    ) %>%
+      sparkR.callJMethod("insert", to_expression_env(set)) %>%
+      newDeltaMergeBuilder()
+  }
+)
+
+
+#' @rdname dlt_when_not_matched_insert
+#' @aliases dlt_when_not_matched_insert,DeltaMergeBuilder,characterOrList,character-method
+#'
+#' @export
+setMethod(
+  "dlt_when_not_matched_insert",
+  signature(dmb = "DeltaMergeBuilder", set = "characterOrList", condition = "character"),
+  function(dmb, set, condition) {
+    validate_is_scalar_like_character(condition)
+
+    dlt_when_not_matched_insert(dmb, set, SparkR::expr(condition))
+  }
+)

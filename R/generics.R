@@ -143,3 +143,13 @@ setGeneric(
     standardGeneric("dlt_when_matched_delete")
   }
 )
+
+
+#' @name dlt_when_not_matched_insert
+#' @rdname dlt_when_not_matched_insert
+setGeneric(
+  "dlt_when_not_matched_insert",
+  function(dmb, set, condition) {
+    standardGeneric("dlt_when_not_matched_insert")
+  }
+)
