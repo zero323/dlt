@@ -357,3 +357,54 @@ test_that("can execute merge with delete on condition", {
       expect_sdf_equivalent(expected)
   })
 })
+
+
+test_that("can execute merge with basic insert on not matched", {
+  path <- delta_test_tempfile()
+
+  source <- test_data("source", TRUE)
+  target <- test_data("target", TRUE)
+
+  exprs <- c(
+    id = "source.id AS id",
+    key = "'x' AS key", val = "-1 AS val",
+    ind = "0 AS ind", category = "'FOO' AS category",
+    lat = "source.lat AS lat", long = "source.long AS long"
+  )
+
+  expected <- source %>%
+    SparkR::join(
+      target, SparkR::expr("source.id = target.id"), "leftanti"
+    ) %>%
+    SparkR::select(lapply(exprs, SparkR::expr)) %>%
+    SparkR::unionAll(target, .)
+
+
+  # With character set
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(source, SparkR::expr("source.id = target.id")) %>%
+      dlt_when_not_matched_insert(exprs) %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+
+  # With Column set
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(source, SparkR::expr("source.id = target.id")) %>%
+      dlt_when_not_matched_insert(lapply(exprs, SparkR::expr)) %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+})
