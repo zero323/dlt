@@ -460,3 +460,34 @@ test_that("can execute merge with insert on not matched with conditon", {
       expect_sdf_equivalent(expected)
   })
 })
+
+
+test_that("can execute merge with insert all on not matched", {
+  path <- delta_test_tempfile()
+
+  source <- test_data("source", TRUE)
+  target <- test_data("target", TRUE)
+
+  not_matched <- source %>%
+    SparkR::join(
+      target,
+      SparkR::expr("source.id = target.id"),
+      "leftanti"
+    )
+
+  expected <- target %>%
+    SparkR::unionAll(not_matched)
+
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(source, SparkR::expr("source.id = target.id")) %>%
+      dlt_when_not_matched_insert_all() %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+})
