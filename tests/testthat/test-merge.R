@@ -491,3 +491,51 @@ test_that("can execute merge with insert all on not matched", {
       expect_sdf_equivalent(expected)
   })
 })
+
+
+test_that("can execute merge with insert all on not matched with condition", {
+  path <- delta_test_tempfile()
+
+  source <- test_data("source", TRUE)
+  target <- test_data("target", TRUE)
+
+  not_matched <- source %>%
+    SparkR::join(
+      target,
+      SparkR::expr("source.id = target.id"),
+      "leftanti"
+    ) %>%
+    SparkR::where(SparkR::column("source.key") == "d")
+
+  expected <- target %>%
+    SparkR::unionAll(not_matched)
+
+
+  # With Column merge and Column insert condtion
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(source, SparkR::expr("source.id = target.id")) %>%
+      dlt_when_not_matched_insert_all(SparkR::column("source.key") == "d") %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+
+  # With character merge and character insert condition
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(source, "source.id = target.id") %>%
+      dlt_when_not_matched_insert_all("source.key = 'd'") %>%
+      dlt_execute()
+
+    target %>%
+      dlt_to_df() %>%
+      expect_sdf_equivalent(expected)
+  })
+})
