@@ -163,3 +163,23 @@ setGeneric(
     standardGeneric("dlt_when_not_matched_insert_all")
   }
 )
+
+
+#' @name dlt_location
+#' @rdname dlt_location
+setGeneric(
+  "dlt_location",
+  function(dtb, location) {
+    standardGeneric("dlt_location")
+  }
+)
+
+
+#' @name dlt_add_column
+#' @rdname dlt_add_column
+setGeneric(
+  "dlt_add_column",
+  function(dtb, col_name, data_type, ...) {
+    standardGeneric("dlt_add_column")
+  }
+)

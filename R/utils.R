@@ -98,3 +98,15 @@ prepare_and_validate_cols <- function(...) {
 
   cols
 }
+
+
+#' Invoke method on jobj if arg not null
+#'
+#' @noRd
+invoke_if_arg_not_null <- function(jobj, method, arg) {
+  if (is.null(arg)) {
+    jobj
+  } else {
+    sparkR.callJMethod(jobj, method, arg)
+  }
+}
