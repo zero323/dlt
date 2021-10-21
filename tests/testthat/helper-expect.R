@@ -57,3 +57,20 @@ expect_collected_sdf_equivalent <- function(actual, expected, ordering = "id") {
 
   invisible(act$val)
 }
+
+
+#' Check if schema of data frame matches expected schema
+#'
+#' @noRd
+expect_schema_equal <- function(x, expected_schema) {
+  expected_schema <- if (is.character(expected_schema)) {
+    SparkR::structType(expected_schema)$jobj
+  } else {
+    expected_schema$jobj
+  }
+
+  actual_schema <- SparkR::schema(x)$jobj
+
+  SparkR::sparkR.callJMethod(actual_schema, "equals", expected_schema) %>%
+    expect_true()
+}

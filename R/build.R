@@ -30,7 +30,7 @@ NULL
 setClass("DeltaTableBuilder", slots = c(jtb = "jobj"))
 
 
-intializeDeltaTableBuilder <- function(initializer) {
+initializeDeltaTableBuilder <- function(initializer) {
   new(
     "DeltaTableBuilder",
     jtb = invoke_delta_table_static(
@@ -48,7 +48,7 @@ intializeDeltaTableBuilder <- function(initializer) {
 #' @export
 #' @note dlt_create, since 1.0.0
 dlt_create <- function() {
-  intializeDeltaTableBuilder("create")
+  initializeDeltaTableBuilder("create")
 }
 
 
@@ -59,7 +59,7 @@ dlt_create <- function() {
 #' @export
 #' @note dlt_create_if_not_exists, since 1.0.0
 dlt_create_if_not_exists <- function() {
-  intializeDeltaTableBuilder("createIfNotExists")
+  initializeDeltaTableBuilder("createIfNotExists")
 }
 
 
@@ -70,7 +70,7 @@ dlt_create_if_not_exists <- function() {
 #' @export
 #' @note dlt_replace, since 1.0.0
 dlt_replace <- function() {
-  intializeDeltaTableBuilder("replace")
+  initializeDeltaTableBuilder("replace")
 }
 
 
@@ -81,7 +81,7 @@ dlt_replace <- function() {
 #' @export
 #' @note dlt_create_or_replace, since 1.0.0
 dlt_create_or_replace <- function() {
-  intializeDeltaTableBuilder("createOrReplace")
+  initializeDeltaTableBuilder("createOrReplace")
 }
 
 
