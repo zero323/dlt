@@ -55,3 +55,30 @@ test_that("can create table with name", {
     dlt_to_df() %>%
     expect_schema_equal(SparkR::structType("id integer"))
 })
+
+
+test_that("can create with columns with additional properties", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    dlt_create() %>%
+      dlt_location(path) %>%
+      dlt_add_column("x", "integer") %>%
+      dlt_add_column(
+        "minus_x", "integer",
+        nullable = TRUE, generated_always_as = "-x"
+      ) %>%
+      dlt_add_column(
+        "comment", "string",
+        nullable = FALSE, comment = "This is a comment"
+      ) %>%
+      dlt_execute() %>%
+      dlt_to_df() %>%
+      SparkR::dtypes() %>%
+      expect_equal(list(
+        c("x", "int"),
+        c("minus_x", "int"),
+        c("comment", "string")
+      ))
+  })
+})
