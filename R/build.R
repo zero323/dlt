@@ -132,6 +132,30 @@ setMethod(
 )
 
 
+#' Specify name of the build table.
+#'
+#' @param dtb Delta table builder
+#' @param identifier character
+#' @return this DeltaTableBuilder
+#'
+#' @name dlt_table_name
+#' @rdname dlt_table_name
+#' @aliases dlt_table_name,DeltaTableBuilder,character-method
+#'
+#' @export
+#' @note dlt_table_name, since 1.0.0
+setMethod(
+  "dlt_table_name",
+  signature(dtb = "DeltaTableBuilder", identifier = "character"),
+  function(dtb, identifier) {
+    validate_is_scalar_like_character(identifier)
+
+    sparkR.callJMethod(dtb@jtb, "tableName", identifier)
+    dtb
+  }
+)
+
+
 #' Add column to the build table
 #'
 #'

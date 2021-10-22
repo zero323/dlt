@@ -175,6 +175,16 @@ setGeneric(
 )
 
 
+#' @name dlt_table_name
+#' @rdname dlt_table_name
+setGeneric(
+  "dlt_table_name",
+  function(dtb, identifier) {
+    standardGeneric("dlt_table_name")
+  }
+)
+
+
 #' @name dlt_add_column
 #' @rdname dlt_add_column
 setGeneric(
