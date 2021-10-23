@@ -82,3 +82,43 @@ test_that("can create with columns with additional properties", {
       ))
   })
 })
+
+
+test_that("cannot create twice for the same location", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    dlt_create() %>%
+      dlt_location(path) %>%
+      dlt_add_column("id", "integer") %>%
+      dlt_execute()
+
+    dlt_create() %>%
+      dlt_location(path) %>%
+      dlt_add_column("id", "integer") %>%
+      dlt_execute() %>%
+      expect_error()
+  })
+})
+
+
+test_that("cannot create twice for the same name", {
+  skip_if(
+    toupper(Sys.getenv("DLT_TESTTHAT_SKIP_SLOW")) == "TRUE",
+    "DLT_TESTTHAT_SKIP_SLOW is TRUE"
+  )
+
+  name <- delta_test_name()
+  withr::defer(SparkR::sql(paste("DROP TABLE IF EXISTS", name)))
+
+  dlt_create() %>%
+    dlt_table_name(name) %>%
+    dlt_add_column("id", "integer") %>%
+    dlt_execute()
+
+  dlt_create() %>%
+    dlt_table_name(name) %>%
+    dlt_add_column("id", "integer") %>%
+    dlt_execute() %>%
+    expect_error()
+})
