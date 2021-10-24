@@ -183,3 +183,33 @@ test_that("can replace", {
   })
 })
 
+
+test_that("can create or replace", {
+  skip_if(
+    toupper(Sys.getenv("DLT_TESTTHAT_SKIP_SLOW")) == "TRUE",
+    "DLT_TESTTHAT_SKIP_SLOW is TRUE"
+  )
+
+  name <- delta_test_name()
+  withr::defer(SparkR::sql(paste("DROP TABLE IF EXISTS", name)))
+
+  dlt_create_or_replace() %>%
+    dlt_table_name(name) %>%
+    dlt_add_column("key", "string") %>%
+    dlt_execute() %>%
+    expect_s4_class("DeltaTable")
+
+  dlt_for_name(name) %>%
+    dlt_to_df() %>%
+    expect_schema_equal("key string")
+
+  dlt_create_or_replace() %>%
+    dlt_table_name(name) %>%
+    dlt_add_column("value", "float") %>%
+    dlt_execute() %>%
+    expect_s4_class("DeltaTable")
+
+  dlt_for_name(name) %>%
+    dlt_to_df() %>%
+    expect_schema_equal("value float")
+})
