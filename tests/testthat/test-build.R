@@ -122,3 +122,33 @@ test_that("cannot create twice for the same name", {
     dlt_execute() %>%
     expect_error()
 })
+
+
+test_that("can create if not exist", {
+  path <- delta_test_tempfile()
+
+  expected_schema <- "key string"
+
+  withr::with_file(path, {
+    dlt_create_if_not_exists() %>%
+      dlt_location(path) %>%
+      dlt_add_column("key", "string") %>%
+      dlt_execute() %>%
+      expect_s4_class("DeltaTable") %>%
+      dlt_to_df() %>%
+      expect_schema_equal(expected_schema)
+
+    # Shouldn't fail
+    dlt_create_if_not_exists() %>%
+      dlt_location(path) %>%
+      dlt_add_column("value", "float") %>%
+      dlt_execute() %>%
+      expect_s4_class("DeltaTable")
+
+    # Shouldn't replace
+    dlt_for_path(path) %>%
+      dlt_to_df() %>%
+      expect_schema_equal(expected_schema)
+  })
+})
+
