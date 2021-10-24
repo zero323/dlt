@@ -152,3 +152,34 @@ test_that("can create if not exist", {
   })
 })
 
+
+test_that("can replace", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    # Should fail if nothing to replace
+    dlt_replace() %>%
+      dlt_location(path) %>%
+      dlt_add_column("key", "string") %>%
+      dlt_execute() %>%
+      expect_error()
+
+    dlt_create() %>%
+      dlt_location(path) %>%
+      dlt_add_column("key", "string") %>%
+      dlt_execute()
+
+    # Shouldn't fail
+    dlt_replace() %>%
+      dlt_location(path) %>%
+      dlt_add_column("value", "float") %>%
+      dlt_execute() %>%
+      expect_s4_class("DeltaTable")
+
+    # Should replace
+    dlt_for_path(path) %>%
+      dlt_to_df() %>%
+      expect_schema_equal("value float")
+  })
+})
+
