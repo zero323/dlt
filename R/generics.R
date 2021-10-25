@@ -193,3 +193,13 @@ setGeneric(
     standardGeneric("dlt_add_column")
   }
 )
+
+
+#' @name dlt_add_columns
+#' @rdname dlt_add_columns
+setGeneric(
+  "dlt_add_columns",
+  function(dtb, schema) {
+    standardGeneric("dlt_add_columns")
+  }
+)

@@ -17,6 +17,7 @@
 #' @include generics.R table.R utils.R
 NULL
 
+setOldClass("structType")
 
 #' S4 class that represents pending table build operation
 #'
@@ -194,5 +195,41 @@ setMethod(
       sparkR.callJMethod(dtb@jtb, "addColumn", .)
 
     dtb
+  }
+)
+
+
+#' Add column to the build table
+#'
+#'
+#' @param dtb Delta table builder
+#' @param schema character (DDL string) or structType
+#' @return this DeltaTableBuilder
+#'
+#' @name dlt_add_columns
+#' @rdname dlt_add_columns
+#' @aliases dlt_add_columns,DeltaTableBuilder,structType-method
+#'
+#' @export
+#' @note dlt_add_columns, since 1.0.0
+setMethod(
+  "dlt_add_columns",
+  signature(dtb = "DeltaTableBuilder", schema = "structType"),
+  function(dtb, schema) {
+    sparkR.callJMethod(dtb@jtb, "addColumns", schema$jobj)
+    dtb
+  }
+)
+
+
+#' @rdname dlt_add_columns
+#' @aliases dlt_add_columns,DeltaTableBuilder,character-method
+#'
+#' @export
+setMethod(
+  "dlt_add_columns",
+  signature(dtb = "DeltaTableBuilder", schema = "character"),
+  function(dtb, schema) {
+    dlt_add_columns(dtb, SparkR::structType(schema))
   }
 )
