@@ -233,3 +233,74 @@ setMethod(
     dlt_add_columns(dtb, SparkR::structType(schema))
   }
 )
+
+#' Add comment describing the build table.
+#'
+#' @param dtb Delta table builder
+#' @param comment character, path
+#' @return this DeltaTableBuilder
+#'
+#' @name dlt_comment
+#' @rdname dlt_comment
+#' @aliases dlt_comment,DeltaTableBuilder,character-method
+#'
+#' @export
+#' @note dlt_comment, since 1.0.0
+setMethod(
+  "dlt_comment",
+  signature(dtb = "DeltaTableBuilder", comment = "character"),
+  function(dtb, comment) {
+    validate_is_scalar_like_character(comment)
+
+    sparkR.callJMethod(dtb@jtb, "comment", comment)
+    dtb
+  }
+)
+
+
+#' Specify partitioning columns
+#'
+#' @param dtb Delta table builder
+#' @param ... character columns
+#'
+#' @name dlt_partitioned_by
+#' @rdname dlt_partitioned_by
+#' @aliases dlt_partitioned_by,DeltaTableBuilder-method
+#'
+#' @export
+#' @note dlt_partitioned_by, since 1.0.0
+setMethod(
+  "dlt_partitioned_by",
+  signature(dtb = "DeltaTableBuilder"),
+  function(dtb, ...) {
+    cols <- prepare_and_validate_cols(...)
+
+    sparkR.callJMethod(dtb@jtb, "partitionedBy", cols)
+    dtb
+  }
+)
+
+
+#' Set property for the build table
+#'
+#' @param dtb Delta table builder
+#' @param key character
+#' @param value character
+#'
+#' @name dlt_property
+#' @rdname dlt_property
+#' @aliases dlt_property,DeltaTableBuilder,character,character-method
+#'
+#' @export
+#' @note dlt_property, since 1.0.0
+setMethod(
+  "dlt_property",
+  signature(dtb = "DeltaTableBuilder", key = "character", value = "character"),
+  function(dtb, key, value) {
+    validate_is_scalar_like_character(key)
+    validate_is_scalar_like_character(value)
+
+    sparkR.callJMethod(dtb@jtb, "property", key, value)
+    dtb
+  }
+)

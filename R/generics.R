@@ -203,3 +203,33 @@ setGeneric(
     standardGeneric("dlt_add_columns")
   }
 )
+
+
+#' @name dlt_comment
+#' @rdname dlt_comment
+setGeneric(
+  "dlt_comment",
+  function(dtb, comment) {
+    standardGeneric("dlt_comment")
+  }
+)
+
+
+#' @name dlt_partitioned_by
+#' @rdname dlt_partitioned_by
+setGeneric(
+  "dlt_partitioned_by",
+  function(dtb, ...) {
+    standardGeneric("dlt_partitioned_by")
+  }
+)
+
+
+#' @name dlt_property
+#' @rdname dlt_property
+setGeneric(
+  "dlt_property",
+  function(dtb, key, value) {
+    standardGeneric("dlt_property")
+  }
+)
