@@ -213,3 +213,27 @@ test_that("can create or replace", {
     dlt_to_df() %>%
     expect_schema_equal("value float")
 })
+
+
+test_that("can create in location with various modifiers", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    dlt_create() %>%
+      dlt_location(path) %>%
+      dlt_add_column("id", "integer") %>%
+      dlt_add_columns(SparkR::structType("key string, value float")) %>%
+      dlt_add_columns("ind int, category string") %>%
+      dlt_partitioned_by("id", "key") %>%
+      dlt_property("some", "value") %>%
+      dlt_comment("a test table") %>%
+      dlt_execute() %>%
+      expect_s4_class("DeltaTable")
+
+    dlt_for_path(path) %>%
+      dlt_to_df() %>%
+      expect_schema_equal(
+        "id integer, key string, value float, ind int, category string"
+      )
+  })
+})
