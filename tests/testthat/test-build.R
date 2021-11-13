@@ -237,3 +237,37 @@ test_that("can create in location with various modifiers", {
       )
   })
 })
+
+
+test_that("pure builder is pure", {
+  path1 <- delta_test_tempfile()
+  path2 <- delta_test_tempfile()
+
+  withr::with_file(c(path1, path2), {
+    base_bldr <- dlt_create() %>%
+      dlt_add_column("id", "integer")
+
+    bldr_1 <- base_bldr %>%
+      dlt_location(path1) %>%
+      dlt_add_column("value1", "boolean")
+
+    bldr_2 <- base_bldr %>%
+      dlt_location(path2) %>%
+      dlt_add_column("value2", "double")
+
+    bldr_1 %>%
+      dlt_execute() %>%
+      expect_s4_class("DeltaTable") %>%
+      dlt_to_df() %>%
+      expect_schema_equal("id integer, value1 boolean")
+
+    # Non-pure implementation fails here because builder is modified in place
+    # so location is overwritten by the second bldr
+    # and both builders point to the same path
+    bldr_2 %>%
+      dlt_execute() %>%
+      expect_s4_class("DeltaTable") %>%
+      dlt_to_df() %>%
+      expect_schema_equal("id integer, value2 double")
+  })
+})

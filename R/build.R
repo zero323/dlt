@@ -49,7 +49,7 @@ initializeDeltaTableBuilder <- function(initializer) {
 #' @export
 #' @note dlt_create, since 1.0.0
 dlt_create <- function() {
-  initializeDeltaTableBuilder("create")
+  initializePureDeltaTableBuilder("create")
 }
 
 
@@ -60,7 +60,7 @@ dlt_create <- function() {
 #' @export
 #' @note dlt_create_if_not_exists, since 1.0.0
 dlt_create_if_not_exists <- function() {
-  initializeDeltaTableBuilder("createIfNotExists")
+  initializePureDeltaTableBuilder("createIfNotExists")
 }
 
 
@@ -71,7 +71,7 @@ dlt_create_if_not_exists <- function() {
 #' @export
 #' @note dlt_replace, since 1.0.0
 dlt_replace <- function() {
-  initializeDeltaTableBuilder("replace")
+  initializePureDeltaTableBuilder("replace")
 }
 
 
@@ -82,7 +82,7 @@ dlt_replace <- function() {
 #' @export
 #' @note dlt_create_or_replace, since 1.0.0
 dlt_create_or_replace <- function() {
-  initializeDeltaTableBuilder("createOrReplace")
+  initializePureDeltaTableBuilder("createOrReplace")
 }
 
 

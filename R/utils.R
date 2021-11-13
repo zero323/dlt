@@ -110,3 +110,11 @@ invoke_if_arg_not_null <- function(jobj, method, arg) {
     sparkR.callJMethod(jobj, method, arg)
   }
 }
+
+
+#' Prepare list that can be used for delayed execution
+#'
+#' @noRd
+prepare_delayed_arg_list <- function(.method, ...) {
+  list(.method = .method, args = list(...))
+}

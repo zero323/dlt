@@ -26,6 +26,7 @@ Collate:
     'generics.R'
     'table.R'
     'build.R'
+    'build-pure.R'
     'merge.R'
     'package.R'
     'readwrite.R'
