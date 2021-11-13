@@ -41,7 +41,7 @@ set.seed(323)
 df <- tibble::tibble(
   id = 1:12,
   key = rep(c("a", "b", "c"), each=4),
-  val = as.integer(round(sample(1:10, 12, TRUE))),
+  val = as.integer(round(base::sample(1:10, 12, TRUE))),
   ind = as.integer(rep(c(-1, 1), 6)),
   category = stringi::stri_rand_strings(12, 3, "[A-Z]"),
   lat = runif(12, -90, 90),
@@ -73,7 +73,7 @@ set.seed(42)
 df <- tibble::tibble(
   id = as.integer(c(1, 3, 5, 14, 16)),
   key = c("a", "b", "b", "c", "d"),
-  val = as.integer(round(sample(1:10, 5, TRUE))),
+  val = as.integer(round(base::sample(1:10, 5, TRUE))),
   ind = as.integer(c(1, 1, -1, -1, -1)),
   category = stringi::stri_rand_strings(5, 3, "[A-Z]"),
   lat = runif(5, -90, 90),
