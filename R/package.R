@@ -18,6 +18,7 @@
 #'
 #' @importFrom magrittr %>%
 #' @name %>%
+#' @export
 #' @rdname pipe
 NULL
 
