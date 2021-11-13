@@ -18,7 +18,7 @@ dlt_vacuum(dt, retention_hours)
 \item{retention_hours}{numeric}
 }
 \value{
-NULL, invisibly
+this DetaTable, invisibly
 }
 \description{
 Vacuum this DeltaTable

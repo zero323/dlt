@@ -22,6 +22,9 @@ dlt_update(dt, set, condition)
 
 \item{condition}{optional, character or Column}
 }
+\value{
+this DetaTable, invisibly
+}
 \description{
 Update data in this DataTable
 }

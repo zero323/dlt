@@ -386,14 +386,12 @@ test_that("can update protocol", {
     tbl <- dlt_for_path(path)
 
     # Should pass
-    expect_null(
-      dlt_upgrade_table_protocol(tbl, 1, 3)
-    )
+    dlt_upgrade_table_protocol(tbl, 1, 3) %>%
+      expect_s4_class("DeltaTable")
 
     # Should fail on attempted downgrade
-    expect_error(
-      dlt_upgrade_table_protocol(tbl, 1, 2)
-    )
+    dlt_upgrade_table_protocol(tbl, 1, 2) %>%
+      expect_error()
   })
 })
 

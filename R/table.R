@@ -127,6 +127,7 @@ setMethod(
 #' @param dt DeltaTable
 #' @param condition optional, character of Column
 #'   If character, interpreted as SQL expression
+#' @returns this DetaTable, invisibly
 #'
 #' @name dlt_delete
 #' @rdname dlt_delete
@@ -138,8 +139,8 @@ setMethod(
   "dlt_delete",
   signature(dt = "DeltaTable", condition = "missing"),
   function(dt) {
-    sparkR.callJMethod(dt@jdt, "delete") %>%
-      invisible()
+    sparkR.callJMethod(dt@jdt, "delete")
+    invisible(dt)
   }
 )
 
@@ -156,7 +157,8 @@ setMethod(
       dt@jdt,
       "delete",
       condition@jc
-    ) %>% invisible()
+    )
+    invisible(dt)
   }
 )
 
@@ -179,6 +181,7 @@ setMethod(
 #' @param dt DeltaTable
 #' @param set named character vector or list of Columns
 #' @param condition optional, character or Column
+#' @returns this DetaTable, invisibly
 #'
 #' @name dlt_update
 #' @rdname dlt_update
@@ -198,7 +201,8 @@ setMethod(
       dt@jdt,
       "update",
       to_expression_env(set)
-    ) %>% invisible()
+    )
+    invisible(dt)
   }
 )
 
@@ -220,7 +224,8 @@ setMethod(
       "update",
       condition@jc,
       to_expression_env(set)
-    ) %>% invisible()
+    )
+    invisible(dt)
   }
 )
 
@@ -371,7 +376,7 @@ setMethod(
 #'
 #' @param dt DataTable
 #' @param retention_hours numeric
-#' @returns NULL, invisibly
+#' @returns this DetaTable, invisibly
 #'
 #' @name dlt_vacuum
 #' @rdname dlt_vacuum
@@ -383,8 +388,8 @@ setMethod(
   "dlt_vacuum",
   signature(dt = "DeltaTable", retention_hours = "missing"),
   function(dt) {
-    sparkR.callJMethod(dt@jdt, "vacuum") %>%
-      invisible()
+    sparkR.callJMethod(dt@jdt, "vacuum")
+    invisible(dt)
   }
 )
 
@@ -397,7 +402,8 @@ setMethod(
   "dlt_vacuum",
   signature(dt = "DeltaTable", retention_hours = "numeric"),
   function(dt, retention_hours) {
-    sparkR.callJMethod(dt@jdt, "vacuum", as.double(retention_hours)) %>% invisible()
+    sparkR.callJMethod(dt@jdt, "vacuum", as.double(retention_hours))
+    invisible(dt)
   }
 )
 
@@ -407,7 +413,7 @@ setMethod(
 #' @param dt DeltaTable
 #' @param reader_version numeric
 #' @param writer_version numeric
-#' @returns NULL, invisibly
+#' @returns this DetaTable, invisibly
 #'
 #' @name dlt_upgrade_table_protocol
 #' @rdname dlt_upgrade_table_protocol
@@ -427,7 +433,8 @@ setMethod(
       "upgradeTableProtocol",
       as.integer(reader_version),
       as.integer(writer_version)
-    ) %>% invisible()
+    )
+    invisible(dt)
   }
 )
 
@@ -436,6 +443,7 @@ setMethod(
 #'
 #' @param dt DeltaTable
 #' @param mode character mode for the type of manifest file to be generated
+#' @returns this DetaTable, invisibly
 #'
 #' @name dlt_generate_manifest
 #' @rdname dlt_generate_manifest
@@ -451,7 +459,8 @@ setMethod(
       dt@jdt,
       "generate",
       match.arg(mode)
-    ) %>% invisible()
+    )
+    invisible(dt)
   }
 )
 
@@ -461,6 +470,7 @@ setMethod(
 #' @param dt DeltaTable
 #' @param source SparkDataFrame
 #' @param condition character or Column
+#' @returns DeltaMergeBuilder
 #'
 #' @name dlt_merge
 #' @rdname dlt_merge

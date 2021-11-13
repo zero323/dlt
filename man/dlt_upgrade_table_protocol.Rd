@@ -17,7 +17,7 @@ dlt_upgrade_table_protocol(dt, reader_version, writer_version)
 \item{writer_version}{numeric}
 }
 \value{
-NULL, invisibly
+this DetaTable, invisibly
 }
 \description{
 Upgrade protocol version of this DeltaTable

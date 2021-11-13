@@ -14,6 +14,9 @@ dlt_generate_manifest(dt, mode)
 
 \item{mode}{character mode for the type of manifest file to be generated}
 }
+\value{
+this DetaTable, invisibly
+}
 \description{
 Generate manifest files for this DeltaTable
 }

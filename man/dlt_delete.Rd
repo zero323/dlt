@@ -21,6 +21,9 @@ dlt_delete(dt, condition)
 \item{condition}{optional, character of Column
 If character, interpreted as SQL expression}
 }
+\value{
+this DetaTable, invisibly
+}
 \description{
 Removes data that matches optional condition
 }

@@ -19,6 +19,9 @@ dlt_merge(dt, source, condition)
 
 \item{condition}{character or Column}
 }
+\value{
+DeltaMergeBuilder
+}
 \description{
 Merge data from sourc with this DataTable, based on condition
 }
