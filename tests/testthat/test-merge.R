@@ -539,3 +539,23 @@ test_that("can execute merge with insert all on not matched with condition", {
       expect_sdf_equivalent(expected)
   })
 })
+
+
+test_that("merge preserves target", {
+  path <- delta_test_tempfile()
+
+  source <- test_data("source", TRUE)
+  target <- test_data("target", TRUE)
+
+  withr::with_file(path, {
+    target <- test_path_target(path)
+
+    target %>%
+      dlt_merge(source, "source.id = target.id") %>%
+      dlt_when_matched_update_all() %>%
+      dlt_execute() %>%
+      expect_invisible() %>%
+      expect_s4_class("DeltaTable") %>%
+      expect_jdt_equal(target)
+  })
+})

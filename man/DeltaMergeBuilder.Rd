@@ -11,6 +11,8 @@ S4 class that represents pending merge operation
 
 \describe{
 \item{\code{jmb}}{A Java object reference to the backing DeltaMergeBuilder}
+
+\item{\code{.target}}{DeltaTable. A reference to the target table}
 }}
 
 \note{

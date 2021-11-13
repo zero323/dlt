@@ -71,6 +71,15 @@ expect_schema_equal <- function(x, expected_schema) {
 
   actual_schema <- SparkR::schema(x)$jobj
 
-  SparkR::sparkR.callJMethod(actual_schema, "equals", expected_schema) %>%
+  jobj_equals(actual_schema, expected_schema) %>%
+    expect_true()
+}
+
+
+#' Check if Java DeltaTable is the same
+#'
+#' @noRd
+expect_jdt_equal <- function(x, y) {
+  jobj_equals(x@jdt, y@jdt) %>%
     expect_true()
 }

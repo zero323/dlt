@@ -25,16 +25,17 @@ NULL
 #' @docType class
 #'
 #' @slot jmb A Java object reference to the backing DeltaMergeBuilder
+#' @slot .target DeltaTable. A reference to the target table
 #'
 #' @note DeltaMergeBuilder, since 1.0.0
-setClass("DeltaMergeBuilder", slots = c(jmb = "jobj"))
+setClass("DeltaMergeBuilder", slots = c(jmb = "jobj", .target = "DeltaTable"))
 
 
 #' A helper method that invokes new for DeltaMergeBuilder
 #'
 #' @noRd
-newDeltaMergeBuilder <- function(x) {
-  new("DeltaMergeBuilder", jmb = x)
+newDeltaMergeBuilder <- function(x, .target) {
+  new("DeltaMergeBuilder", jmb = x, .target = .target)
 }
 
 
@@ -53,8 +54,8 @@ setMethod(
   "dlt_execute",
   signature(bldr = "DeltaMergeBuilder"),
   function(bldr) {
-    sparkR.callJMethod(bldr@jmb, "execute") %>%
-      invisible()
+    sparkR.callJMethod(bldr@jmb, "execute")
+    invisible(bldr@.target)
   }
 )
 
@@ -78,7 +79,7 @@ setMethod(
   function(dmb, set) {
     sparkR.callJMethod(dmb@jmb, "whenMatched") %>%
       sparkR.callJMethod("update", to_expression_env(set)) %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 
@@ -93,7 +94,7 @@ setMethod(
   function(dmb, set, condition) {
     sparkR.callJMethod(dmb@jmb, "whenMatched", condition@jc) %>%
       sparkR.callJMethod("update", to_expression_env(set)) %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 
@@ -131,7 +132,7 @@ setMethod(
   function(dmb) {
     sparkR.callJMethod(dmb@jmb, "whenMatched") %>%
       sparkR.callJMethod("updateAll") %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 
@@ -146,7 +147,7 @@ setMethod(
   function(dmb, condition) {
     sparkR.callJMethod(dmb@jmb, "whenMatched", condition@jc) %>%
       sparkR.callJMethod("updateAll") %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 
@@ -187,7 +188,7 @@ setMethod(
       "whenMatched"
     ) %>%
       sparkR.callJMethod("delete") %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 
@@ -206,7 +207,7 @@ setMethod(
       condition@jc
     ) %>%
       sparkR.callJMethod("delete") %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 
@@ -248,7 +249,7 @@ setMethod(
       "whenNotMatched"
     ) %>%
       sparkR.callJMethod("insert", to_expression_env(set)) %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 
@@ -267,7 +268,7 @@ setMethod(
       condition@jc
     ) %>%
       sparkR.callJMethod("insert", to_expression_env(set)) %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 
@@ -308,7 +309,7 @@ setMethod(
       "whenNotMatched"
     ) %>%
       sparkR.callJMethod("insertAll") %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 
@@ -327,7 +328,7 @@ setMethod(
       condition@jc
     ) %>%
       sparkR.callJMethod("insertAll") %>%
-      newDeltaMergeBuilder()
+      newDeltaMergeBuilder(dmb@.target)
   }
 )
 

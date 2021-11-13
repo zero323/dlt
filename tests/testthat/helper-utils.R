@@ -29,6 +29,13 @@ delta_test_name <- function(prefix = "delta_test") {
   paste(prefix, stringi::stri_rand_strings(1, 10), sep = "_")
 }
 
+#' Check if jobj are equal
+#'
+#' @noRd
+jobj_equals <- function(x, y) {
+  sparkR.callJMethod(x, "equals", y)
+}
+
 
 #' Set Spark configuration
 #'

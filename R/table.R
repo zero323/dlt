@@ -491,7 +491,7 @@ setMethod(
       "merge",
       source@sdf,
       condition@jc
-    ) %>% newDeltaMergeBuilder()
+    ) %>% newDeltaMergeBuilder(dt)
   }
 )
 
