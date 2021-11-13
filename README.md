@@ -106,6 +106,31 @@ read.delta("/tmp/source") %>%
 # +---+---+---+---+--------+------------------+-------------------+
 ```
 
+### Loading DeltaTable objects
+
+`DataTable` objects can be created for file system path:
+
+
+```r
+dlt_for_path("/tmp/target/") %>%
+  dlt_to_df()
+
+# SparkDataFrame[id:int, key:string, val:int, ind:int, category:string, lat:double, long:double]
+```
+
+or for the table name:
+
+```r
+source %>% 
+  saveAsTable("source", source="delta")
+
+dlt_for_name("source")  %>%
+  dlt_to_df()
+
+# SparkDataFrame[id:int, key:string, val:int, ind:int, category:string, lat:double, long:double]
+```
+
+
 ## Notes
 
 Examples use `source` and `target` datasets as described in `tests/testthat/data/README.md`.
