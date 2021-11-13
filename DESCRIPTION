@@ -10,7 +10,7 @@ License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
 Imports:
-  SparkR (== 3.1.2),
+  SparkR (>= 3.1.0),
   magrittr,
   methods,
 Suggests:
