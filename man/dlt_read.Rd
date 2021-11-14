@@ -7,7 +7,7 @@
 dlt_read(path, ...)
 }
 \arguments{
-\item{path}{path of file to read. A vector of multiple paths is allowed.}
+\item{path}{path of file to read.}
 
 \item{...}{additional data source specific named properties.}
 }

@@ -22,7 +22,7 @@ NULL
 #'
 #' Loads a DeltaTable, returning the result as a SparkDataFrame.
 #'
-#' @param path path of file to read. A vector of multiple paths is allowed.
+#' @param path path of file to read.
 #' @param ... additional data source specific named properties.
 #' @rdname dlt_read
 #' @name dlt_read
@@ -41,7 +41,7 @@ dlt_read <- function(path, ...) {
 #'
 #' Loads a DeltaTable, returning the result as a SparkDataFrame.
 #'
-#' @param path path of file to read. A vector of multiple paths is allowed.
+#' @param path path of file to read.
 #' @param ... additional data source specific named properties.
 #' @rdname read.delta
 #' @name read.delta
