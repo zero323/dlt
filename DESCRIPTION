@@ -30,3 +30,4 @@ Collate:
     'merge.R'
     'package.R'
     'readwrite.R'
+    'readwrite_stream.R'

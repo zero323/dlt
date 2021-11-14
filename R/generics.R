@@ -233,3 +233,13 @@ setGeneric(
     standardGeneric("dlt_property")
   }
 )
+
+
+#' @name dlt_write_stream
+#' @rdname dlt_write_stream
+setGeneric(
+  "dlt_write_stream",
+  function(df, path, ...) {
+    standardGeneric("dlt_write_stream")
+  }
+)
