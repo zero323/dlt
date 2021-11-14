@@ -1,0 +1,39 @@
+image: rocker/tidyverse
+
+variables:
+  SPARK_VERSION: "3.1.2"
+  HADOOP_VERSION: "3.2"
+  SPARK_DIST: "spark-$SPARK_VERSION-bin-hadoop$HADOOP_VERSION"
+  SPARK_GIT_REF: "v$SPARK_VERSION"
+  SPARK_HOME: "/tmp/$SPARK_DIST"
+
+stages:
+  - lint
+  - build_and_test
+
+linting:
+  stage: lint
+  when: on_success
+  script:
+    - R -e 'install.packages(c("lintr", "styler"))'
+    - R -e 'styler::style_pkg(dry="fail")'
+    - R -e 'lintr::lint_package()'
+
+building_and_testing:
+  stage: build_and_test
+  when: on_success
+  script:
+    - sudo apt update && sudo apt install -y openjdk-11-jdk-headless
+    - wget https://dlcdn.apache.org/spark/spark-$SPARK_VERSION/$SPARK_DIST.tgz
+    - tar xf $SPARK_DIST.tgz && mv $SPARK_DIST /tmp && rm $SPARK_DIST.tgz
+    - R -e 'remotes::install_git("https://github.com/apache/spark.git", subdir="R/pkg", ref=Sys.getenv("SPARK_GIT_REF"))'
+    - R -e 'remotes::install_deps(dependencies = TRUE)'
+    - Rscript -e 'install.packages(c("covr", "DT"))'
+    - DLT_VERSION=$(grep -oP "(?<=Version:\ ).*" DESCRIPTION)
+    - R CMD build .
+    - R CMD check --no-tests --no-manual dlt_$DLT_VERSION.tar.gz
+    - Rscript -e 'covr::gitlab(quiet = FALSE)'
+  artifacts:
+      paths:
+          - public
+      expire_in: 7 days
