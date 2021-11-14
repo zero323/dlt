@@ -1,5 +1,3 @@
-image: rocker/tidyverse
-
 variables:
   SPARK_VERSION: "3.1.2"
   HADOOP_VERSION: "3.2"
@@ -10,8 +8,10 @@ variables:
 stages:
   - lint
   - build_and_test
+  - spellcheck
 
 linting:
+  image: rocker/tidyverse
   stage: lint
   when: on_success
   script:
@@ -20,6 +20,7 @@ linting:
     - R -e 'lintr::lint_package()'
 
 building_and_testing:
+  image: rocker/tidyverse
   stage: build_and_test
   when: on_success
   script:
@@ -37,3 +38,11 @@ building_and_testing:
       paths:
           - public
       expire_in: 7 days
+
+spellchecking:
+  image: vlajos/misspell-fixer
+  stage: spellcheck
+  allow_failure: true
+  script:
+    - misspell-fixer -v README.md R tests
+
