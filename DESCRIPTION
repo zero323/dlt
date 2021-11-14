@@ -31,3 +31,4 @@ Collate:
     'package.R'
     'readwrite.R'
     'readwrite_stream.R'
+    'show.R'

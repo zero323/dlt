@@ -243,3 +243,10 @@ setGeneric(
     standardGeneric("dlt_write_stream")
   }
 )
+
+
+#' @name dlt_show
+#' @rdname dlt_show
+setGeneric("dlt_show", function(dt, ...) {
+  standardGeneric("dlt_show")
+})
