@@ -34,7 +34,7 @@ setClass("DeltaMergeBuilder", slots = c(jmb = "jobj", .target = "DeltaTable"))
 #' A helper method that invokes new for DeltaMergeBuilder
 #'
 #' @noRd
-newDeltaMergeBuilder <- function(x, .target) {
+newDeltaMergeBuilder <- function(x, .target) { # nolint
   new("DeltaMergeBuilder", jmb = x, .target = .target)
 }
 

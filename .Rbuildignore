@@ -6,3 +6,4 @@
 ^spark-warehouse$
 ^tests/testthat/metastore_db$
 ^tests/testthat/spark-warehouse$
+^.lintr$

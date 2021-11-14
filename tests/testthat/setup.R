@@ -20,7 +20,7 @@ Sys.setenv(SPARK_CONF_DIR = test_path("conf"))
 SparkR::sparkR.session()
 
 withr::defer(
-  {
+  { # nolint
     SparkR::sparkR.session.stop()
     Sys.setenv(SPARK_CONF_DIR = old_spark_conf_dir)
     unlink(testthat::test_path("metastore_db"), recursive = TRUE)

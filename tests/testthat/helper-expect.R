@@ -19,7 +19,7 @@
 #' @noRd
 expect_sdf_equivalent <- function(actual, expected) {
   act <- quasi_label(rlang::enquo(actual), arg = "actual")
-  exp <- quasi_label(rlang::enquo(expected), arg = "expected")
+  exp <- quasi_label(rlang::enquo(expected), arg = "expected") # nolint
 
 
   actual_minus_expected <- SparkR::exceptAll(actual, expected)
@@ -45,7 +45,7 @@ expect_sdf_equivalent <- function(actual, expected) {
 #' @noRd
 expect_collected_sdf_equivalent <- function(actual, expected, ordering = "id") {
   act <- quasi_label(rlang::enquo(actual), arg = "actual")
-  exp <- quasi_label(rlang::enquo(expected), arg = "expected")
+  exp <- quasi_label(rlang::enquo(expected), arg = "expected") # nolint
 
 
   expect_equal(

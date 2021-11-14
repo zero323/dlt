@@ -31,7 +31,7 @@ NULL
 setClass("PureDeltaTableBuilder", slots = c(method = "character", ops = "list"))
 
 
-newPureDeltaTableBuilder <- function(method, collected_ops, ops) {
+newPureDeltaTableBuilder <- function(method, collected_ops, ops) { # nolint
   new(
     "PureDeltaTableBuilder",
     method = method,
@@ -40,7 +40,7 @@ newPureDeltaTableBuilder <- function(method, collected_ops, ops) {
 }
 
 
-initializePureDeltaTableBuilder <- function(initializer) {
+initializePureDeltaTableBuilder <- function(initializer) { # nolint
   new(
     "PureDeltaTableBuilder",
     method = initializer,

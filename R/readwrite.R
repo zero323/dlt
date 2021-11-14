@@ -52,7 +52,7 @@ dlt_read <- function(path, ...) {
 #' }
 #' @export
 #' @seealso dlt_read
-read.delta <- function(path, ...) {
+read.delta <- function(path, ...) { # nolint
   dlt_read(path, ...)
 }
 

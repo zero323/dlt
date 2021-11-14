@@ -31,7 +31,7 @@ setOldClass("structType")
 setClass("DeltaTableBuilder", slots = c(jtb = "jobj"))
 
 
-initializeDeltaTableBuilder <- function(initializer) {
+initializeDeltaTableBuilder <- function(initializer) { # nolint
   new(
     "DeltaTableBuilder",
     jtb = invoke_delta_table_static(
