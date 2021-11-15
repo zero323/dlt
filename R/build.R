@@ -30,17 +30,6 @@ NULL
 setClass("DeltaTableBuilder", slots = c(jtb = "jobj"))
 
 
-initializeDeltaTableBuilder <- function(initializer) { # nolint
-  new(
-    "DeltaTableBuilder",
-    jtb = invoke_delta_table_static(
-      initializer,
-      active_session()
-    )
-  )
-}
-
-
 #' Build DeltaTable
 #'
 #' @returns DeltaTableBuilder
