@@ -118,17 +118,3 @@ invoke_if_arg_not_null <- function(jobj, method, arg) {
 prepare_delayed_arg_list <- function(.method, ...) {
   list(.method = .method, args = list(...))
 }
-
-
-#' Call static initializer method for DataTable builder
-#'
-#' @noRd
-initializeDeltaTableBuilder <- function(initializer) { # nolint
-  new(
-    "DeltaTableBuilder",
-    jtb = invoke_delta_table_static(
-      initializer,
-      active_session()
-    )
-  )
-}
