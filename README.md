@@ -282,6 +282,54 @@ dlt_read("/tmp/target-stream/", versionAsOf=0) %>%
 # [1] 12
 ```
 
+### Querying Delta log
+
+```r
+
+target_stream_history <- dlt_for_path("/tmp/target-stream/") %>%
+  dlt_history()
+
+target_stream_history %>%
+  printSchema()
+
+# root
+#  |-- version: long (nullable = true)
+#  |-- timestamp: timestamp (nullable = true)
+#  |-- userId: string (nullable = true)
+#  |-- userName: string (nullable = true)
+#  |-- operation: string (nullable = true)
+#  |-- operationParameters: map (nullable = true)
+#  |    |-- key: string
+#  |    |-- value: string (valueContainsNull = true)
+#  |-- job: struct (nullable = true)
+#  |    |-- jobId: string (nullable = true)
+#  |    |-- jobName: string (nullable = true)
+#  |    |-- runId: string (nullable = true)
+#  |    |-- jobOwnerId: string (nullable = true)
+#  |    |-- triggerType: string (nullable = true)
+#  |-- notebook: struct (nullable = true)
+#  |    |-- notebookId: string (nullable = true)
+#  |-- clusterId: string (nullable = true)
+#  |-- readVersion: long (nullable = true)
+#  |-- isolationLevel: string (nullable = true)
+#  |-- isBlindAppend: boolean (nullable = true)
+#  |-- operationMetrics: map (nullable = true)
+#  |    |-- key: string
+#  |    |-- value: string (valueContainsNull = true)
+#  |-- userMetadata: string (nullable = true)
+
+target_stream_history %>%
+  select("version", "operation", "operationParameters") %>%
+  showDF(truncate = FALSE)
+
+# +-------+----------------+-------------------------------------------------------------------------------------+
+# |version|operation       |operationParameters                                                                  |
+# +-------+----------------+-------------------------------------------------------------------------------------+
+# |1      |DELETE          |{predicate -> ["(`id` IN (1, 3, 5))"]}                                               |
+# |0      |STREAMING UPDATE|{outputMode -> Append, queryId -> 8fce2444-5acf-4f82-adf9-838e64d5d82a, epochId -> 0}|
+# +-------+----------------+-------------------------------------------------------------------------------------+
+```
+
 ### Building DeltaTables
 
 New tables can be created (`dlt_create`), created if not exists (`dlt_create_if_not_exists`), replaced (`dlt_replace`) and created or replaced (`dlt_create_or_replace`). All `DeltaTableBuilder` methods are supported.
