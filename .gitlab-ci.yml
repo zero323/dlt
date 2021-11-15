@@ -33,11 +33,7 @@ building_and_testing:
     - DLT_VERSION=$(grep -oP "(?<=Version:\ ).*" DESCRIPTION)
     - R CMD build .
     - R CMD check --no-tests --no-manual dlt_$DLT_VERSION.tar.gz
-    - Rscript -e 'covr::gitlab(quiet = FALSE)'
-  artifacts:
-      paths:
-          - public
-      expire_in: 7 days
+    - Rscript -e 'print(covr::package_coverage())'
 
 spellchecking:
   image: vlajos/misspell-fixer
@@ -45,4 +41,3 @@ spellchecking:
   allow_failure: true
   script:
     - misspell-fixer -v README.md R tests
-
