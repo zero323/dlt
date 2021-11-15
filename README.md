@@ -258,6 +258,29 @@ dlt_for_path("/tmp/target") %>%
 # only showing top 10 rows
 ```
 
+### Time travel
+
+Time travel is possible by setting `timestampAsOf` or `versionAsOf` `options`.
+
+```r
+dlt_read("/tmp/target-stream/") %>%
+  count()
+
+# [1] 12
+
+dlt_for_path("/tmp/target-stream/") %>%
+  dlt_delete("id IN (1, 3, 5)")
+
+dlt_read("/tmp/target-stream/") %>%
+  count()
+
+# [1] 9
+
+dlt_read("/tmp/target-stream/", versionAsOf=0) %>%
+  count()
+
+# [1] 12
+```
 
 ### Building DeltaTables
 
