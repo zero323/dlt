@@ -281,6 +281,88 @@ dlt_create() %>%
 #  |-- value: double (nullable = true)
 ```
 
+### Maintenance and conversions
+
+You can use `dlt` to convert Parquet directories to `DeltaTable` 
+
+```r
+target %>%
+  write.parquet("/tmp/target-parquet")
+
+dlt_is_delta_table("/tmp/target-parquet/")
+# [1] FALSE
+
+tbl <- dlt_convert_to_delta("parquet.`/tmp/target-parquet/`")
+
+dlt_is_delta_table("/tmp/target-parquet/")
+# [1] TRUE
+
+tbl %>%
+  dlt_show(5)
+
+# +---+---+---+---+--------+-------------------+-------------------+
+# | id|key|val|ind|category|                lat|               long|
+# +---+---+---+---+--------+-------------------+-------------------+
+# |  1|  a|  4| -1|     KBQ| -56.28354165237397|-108.74080670066178|
+# |  2|  a| 10|  1|     ROB| 50.546925463713706|-104.60825988091528|
+# |  3|  a|  7| -1|     SLX|-13.985343240201473|-114.89280310459435|
+# |  4|  a|  5|  1|     ACP| -47.15050248429179|-168.96175763569772|
+# |  5|  b|  3| -1|     EEK|-49.020595396868885|-105.57821027934551|
+# +---+---+---+---+--------+-------------------+-------------------+
+# only showing top 5 rows
+```
+
+vacuum `DeltaTables`:
+
+```r
+dlt_for_path("/tmp/target") %>%
+  dlt_vacuum()
+
+# Deleted 0 files and directories in a total of 1 directories.
+```
+
+generate manifests:
+
+```r
+dlt_for_path("/tmp/target") %>%
+  dlt_generate_manifest("symlink_format_manifest")
+```
+
+and upgrade Delta protocols
+
+```r
+key_val_log_path <- "/tmp/key-val/_delta_log/*json"
+
+read.json(key_val_log_path) %>%
+  select("metaData.id", "commitInfo.operation", "protocol") %>%
+  showDF()
+
+# +--------------------+------------+--------+
+# |                  id|   operation|protocol|
+# +--------------------+------------+--------+
+# |                null|CREATE TABLE|    null|
+# |                null|        null|  {1, 2}|
+# |72d4784b-e656-44a...|        null|    null|
+# +--------------------+------------+--------+
+
+dlt_for_path("/tmp/key-val") %>% 
+  dlt_upgrade_table_protocol(1, 3)
+
+read.json(key_val_log_path) %>%
+  select("metaData.id", "commitInfo.operation", "protocol") %>%
+  showDF()
+
+# +--------------------+----------------+--------+
+# |                  id|       operation|protocol|
+# +--------------------+----------------+--------+
+# |                null|    CREATE TABLE|    null|
+# |                null|            null|  {1, 2}|
+# |72d4784b-e656-44a...|            null|    null|
+# |                null|UPGRADE PROTOCOL|    null|
+# |                null|            null|  {1, 3}|
+# +--------------------+----------------+--------+
+```
+
 ## Notes
 
 Examples use `source` and `target` datasets as described in `tests/testthat/data/README.md`.
