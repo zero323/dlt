@@ -258,6 +258,29 @@ dlt_for_path("/tmp/target") %>%
 # only showing top 10 rows
 ```
 
+
+### Building DeltaTables
+
+New tables can be created (`dlt_create`), created if not exists (`dlt_create_if_not_exists`), replaced (`dlt_replace`) and created or replaced (`dlt_create_or_replace`). All `DeltaTableBuilder` methods are supported.
+
+```r
+dlt_create() %>%
+  dlt_location("/tmp/key-val") %>%
+  dlt_add_column("id", "integer", nullable = FALSE) %>%
+  dlt_add_columns(structType("key string, value double")) %>%
+  dlt_partitioned_by("key") %>%
+  dlt_comment("Key-value table") %>%
+  dlt_property("creation-time", as.character(Sys.time())) %>%
+  dlt_execute() %>%
+  dlt_to_df() %>%
+  printSchema()
+
+# root
+#  |-- id: integer (nullable = false)
+#  |-- key: string (nullable = true)
+#  |-- value: double (nullable = true)
+```
+
 ## Notes
 
 Examples use `source` and `target` datasets as described in `tests/testthat/data/README.md`.
