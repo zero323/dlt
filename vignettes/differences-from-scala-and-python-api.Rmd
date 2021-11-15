@@ -1,0 +1,145 @@
+---
+title: "Differences from Scala and Python API"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Differences from Scala and Python API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Public naming convention
+
+All exported methods and functions, with exception to compatibility reader and writer (`read.delta` and `write.delta`), use `dlt_` prefix followed by [snake case](https://en.wikipedia.org/wiki/Snake_case) name.
+
+For example, `dlt` equivalent of the upstream `convertToDelta`, is `dlt_convert_to_delta`.
+
+## Argument order
+
+Python Delta Lake API provides a number of methods with an optional `condition`, followed by mandatory `set` (mapping between column name and update expression). For example, `DeltaMergeBuilder.whenMatchedUpdate` can be called with either `condtion` and `set`:
+
+```{python eval = FALSE, python.reticulate = FALSE}
+@overload
+def whenMatchedUpdate(
+    self, condition: OptionalExpressionOrColumn, set: ColumnMapping
+) -> "DeltaMergeBuilder": ...
+```
+or only `set`, passed as a keyword argument
+```{python eval = FALSE, python.reticulate = FALSE}
+@overload
+def whenMatchedUpdate(
+    self, *, set: ColumnMapping
+) -> "DeltaMergeBuilder": ...
+```
+This follows Scala information flow, [where](https://docs.delta.io/latest/api/scala/io/delta/tables/DeltaMergeBuilder.html) merge operation is defined using interleaved operations on `DeltaMergeBuilder` (`whenMatched`, `whenNotMached`) and `DeltaMerge*ActionBuilder` (i.e. `insert`, `insertAll`, `update`, `updateAll`, `delete`)
+
+
+```{scala eval = FALSE}
+deltaTable
+  .as("target")
+  .merge(
+    source.as("source"),
+    "target.key = source.key")
+  .whenMatched("source.value < target.value")  // Returns DeltaMergeMatchedActionBuilder
+  .update(Map(
+    "value" -> expr("source.value")
+   ))  // Returns DeltaMergeBuilder
+  .whenNotMatched("source.value < target.value")  // Returns DeltaMergeNotMatchedActionBuilder
+  .insert(Map(
+    "key" -> expr("source.key")
+    "value" -> lit(0)
+  ))  // Returns DeltaMergeBuilder
+  .execute()
+```
+so `condition`, if present, is always provided before `set`.
+
+In contrast, `dlt` provides composite methods modeled after Python API, but mandatory arguments are placed before the optional ones. So Python's
+
+```{python eval = FALSE, python.reticulate = FALSE}
+def whenMatchedUpdate(
+    self,
+    condition: OptionalExpressionOrColumn = None,
+    set: OptionalColumnMapping = None
+) -> "DeltaMergeBuilder": ...
+```
+is mapped to
+
+```{r, eval = FALSE}
+setGeneric(
+  "dlt_when_matched_update",
+  function(dmb, set, condition) {
+    standardGeneric("dlt_when_matched_update")
+  }
+)
+```
+in `dlt`.
+
+## Return types
+
+In Scala and Python API, methods used for their side effects, with exception to `DeltaTableBuilder.execute` (`DeltaMergeBuilder.execute`, `DeltaTable.update`, `DeltaTable.delete`, `DeltaTable.generate`, etc.), are `Unit()` or `None` respectively.
+
+Additionally, `DeltaTable.vacuum` returns an empty Spark `DataFrame`.
+
+In contrast, `dlt` invisibly returns an applicable instance of `DeltaTable` (`target` `DeltaTable` for merge operations, `DeltaTable`, on which method has been called, otherwise).
+
+As a result, it is possible to chain calls like these:
+
+```{r, eval = FALSE}
+dlt_for_path("/tmp/target") %>%
+  dlt_delete("id in (1, 3, 5)") %>%
+  dlt_update(list(ind = "-ind"), "key = 'a'") %>%
+  dlt_alias("target") %>%
+  dlt_merge(alias(source, "source"), "source.id = target.id") %>%
+  dlt_when_not_matched_insert_all() %>%
+  dlt_execute() %>%
+  dlt_show()
+```
+
+Please keep in mind that, while convenient to write, such code can be harder to reason about and recover in case of coding error. Use with caution.
+
+## Function purity
+
+Scala and Python `DeltaTableBuilder` use a mutable state to build table definition. As a result, table partial table builder definitions are not suitable for reuse. For example, the following Scala code:
+
+```{scala eval = FALSE}
+import org.apache.spark.sql.types._
+
+val parentBuilder = DeltaTable
+  .create(spark)
+  .addColumn("id", "integer")
+  .addColumns(StructType(Seq(
+    StructField("key", StringType), StructField("value", DoubleType))
+  ))
+
+val firstChildBuilder = baseBuilder.tableName("first_child_table")
+val secondChildBuilder = baseBuilder.tableName("second_child_table")
+
+firstChildBuilder.execute()
+secondChildBuilder.execute()
+```
+fails with
+
+```
+org.apache.spark.sql.catalyst.analysis.TableAlreadyExistsException: Table default.second_child_table already exists
+```
+
+In contrast, `dlt` builder is free of side effects, and can be easily reused:
+
+```{r, eval = FALSE}
+
+parent_builder <- dlt_create() %>%
+  dlt_add_column("id", "integer") %>%
+  dlt_add_columns(structType("key string, value double"))
+
+
+first_child_builder <- parent_builder %>%
+  dlt_table_name("first_child_table")
+
+second_child_builder <- parent_builder %>%
+  dlt_table_name("second_child_table")
+
+first_child_builder %>%
+  dlt_execute()
+
+second_child_builder %>%
+  dlt_execute()
+```

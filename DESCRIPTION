@@ -14,10 +14,12 @@ Imports:
   magrittr,
   methods,
 Suggests:
-  testthat (>= 3.0.0),
-  withr (>= 2.4.2),
-  rlang (>= 0.4.11),
-  stringi (>= 1.7.4),
+    testthat (>= 3.0.0),
+    withr (>= 2.4.2),
+    rlang (>= 0.4.11),
+    stringi (>= 1.7.4),
+    knitr,
+    rmarkdown
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Config/testthat/edition: 3
@@ -32,3 +34,4 @@ Collate:
     'readwrite.R'
     'readwrite_stream.R'
     'show.R'
+VignetteBuilder: knitr
