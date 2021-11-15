@@ -20,6 +20,12 @@ NULL
 
 #' S4 class that represents pending table build operation
 #'
+#' This class is used primarily to support `PureDeltaTableBuilder`.
+#' Internally, it holds reference to a mutable Java `DeltaTableBuilder`
+#' and all implemented methods mutate it in place.
+#' While it is possible to use it directly, `PureDeltaTableBuilder`
+#' is preferred and provides the same API.
+#'
 #' @family DeltaTableBuilder functions
 #' @rdname DeltaTableBuilder
 #' @docType class
@@ -27,6 +33,7 @@ NULL
 #' @slot jtb A Java object reference to the backing DeltaTableBuilder
 #'
 #' @note DeltaTableBuilder, since 1.0.0
+#' @seealso PureDeltaTableBuilder
 setClass("DeltaTableBuilder", slots = c(jtb = "jobj"))
 
 
