@@ -8,3 +8,6 @@
 ^tests/testthat/spark-warehouse$
 ^.lintr$
 ^\.gitlab-ci\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

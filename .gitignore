@@ -51,3 +51,4 @@ po/*~
 # Metastore files
 metastore_db
 spark-warehouse
+docs
