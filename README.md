@@ -152,7 +152,7 @@ Examples use `source` and `target` datasets as described in `tests/testthat/data
 ## Acknowledgments 
 
 Logo based on [Yellow wasp, m, left, Kruger National Park, South Africa](https://flickr.com/photos/54563451@N08/45531028154) 
-by [USGS Bee Inventory and Monitoring Lab ](https://www.flickr.com/photos/usgsbiml/). 
+by [USGS Bee Inventory and Monitoring Lab](https://www.flickr.com/photos/usgsbiml/).
 
 ## Disclaimer
 
