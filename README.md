@@ -221,9 +221,42 @@ dlt_for_path("/tmp/target") %>%
   count()
 
 # [1] 0
-```    
+```
 
 condition are supported.
+
+### Merging SparkDataFrame with DeltaTable
+
+`dlt` supports a complete set of `DeltaMergeBuilder` methods (`dlt_when_matched_delete`, `dlt_when_matched_update`, `dlt_when_matched_update_all`, `dlt_when_not_matched_insert`, `dlt_when_not_matched_insert_all`).
+
+```r
+target %>%
+  dlt_write("/tmp/target", mode="overwrite")
+
+dlt_for_path("/tmp/target") %>%
+  dlt_alias("target") %>%
+  dlt_merge(alias(source, "source"), expr("source.id = target.id")) %>%
+  dlt_when_matched_update_all() %>%
+  dlt_when_not_matched_insert_all() %>%
+  dlt_execute() %>%
+  dlt_show(10)
+
+# +---+---+---+---+--------+------------------+-------------------+
+# | id|key|val|ind|category|               lat|               long|
+# +---+---+---+---+--------+------------------+-------------------+
+# |  6|  b|  2|  1|     SMT| 80.79935231711715| -46.80488987825811|
+# | 16|  d| 10| -1|     DMO|-75.16123954206705| 120.96153359860182|
+# |  7|  b|  9| -1|     LBC| 51.65884342510253|  97.16074059717357|
+# | 14|  c|  9| -1|     MYZ| 80.40028186049312|-19.090933883562684|
+# |  9|  c| 10| -1|     LCN| 76.90145746339113| -138.4841349441558|
+# | 12|  c| 10|  1|     TBL| 6.229456798173487|  55.28501939959824|
+# | 11|  c|  5| -1|     ZSH| 89.73377700895071|  61.67111137881875|
+# |  3|  b|  5|  1|     RSL|-65.03216980956495| -39.52675184234977|
+# |  4|  a|  5|  1|     ACP|-47.15050248429179|-168.96175763569772|
+# |  1|  a|  1|  1|     NTD| 72.72564971353859|  5.116242365911603|
+# +---+---+---+---+--------+------------------+-------------------+
+# only showing top 10 rows
+```
 
 ## Notes
 
