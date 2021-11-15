@@ -130,6 +130,20 @@ dlt_for_name("source")  %>%
 # SparkDataFrame[id:int, key:string, val:int, ind:int, category:string, lat:double, long:double]
 ```
 
+### Streaming reads and writes
+
+`dlt_read_stream` and `dlt_read_stream` can be used for streaming reads and writes respectively.
+
+```r
+query <- dlt_read_stream("/tmp/target") %>%
+  dlt_write_stream(
+    path = "/tmp/target-stream", queryName = "test", trigger.once = TRUE,
+    checkpointLocation = "/tmp/target-stream/_checkpoints/test"
+  )
+
+awaitTermination(query, 10000)
+# [1] TRUE
+```
 
 ## Notes
 
