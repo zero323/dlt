@@ -7,7 +7,7 @@
 dlt_create_or_replace()
 }
 \value{
-DeltaTableBuilder
+InternalDeltaTableBuilder
 }
 \description{
 Create or replace DeltaTable

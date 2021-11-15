@@ -7,7 +7,7 @@
 dlt_create_if_not_exists()
 }
 \value{
-DeltaTableBuilder
+InternalDeltaTableBuilder
 }
 \description{
 Build DeltaTable if doesn't exits

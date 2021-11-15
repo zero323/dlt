@@ -14,87 +14,88 @@
 # limitations under the License.
 #
 
-#' @include generics.R package.R utils.R
+#' @include generics.R utils.R build_internal.R
 NULL
 
 
 #' S4 class that represents pending table build operation
 #'
-#' This class is used primarily to support `PureDeltaTableBuilder`.
-#' Internally, it holds reference to a mutable Java `DeltaTableBuilder`
-#' and all implemented methods mutate it in place.
-#' While it is possible to use it directly, `PureDeltaTableBuilder`
-#' is preferred and provides the same API.
-#'
 #' @family DeltaTableBuilder functions
 #' @rdname DeltaTableBuilder
 #' @docType class
 #'
-#' @slot jtb A Java object reference to the backing DeltaTableBuilder
+#' @slot method character name of the initializer method
+#' @slot ops list list of operations in form of list(.method = ..., args = list(...))
 #'
 #' @note DeltaTableBuilder, since 1.0.0
-#' @seealso PureDeltaTableBuilder
-setClass("DeltaTableBuilder", slots = c(jtb = "jobj"))
+setClass("DeltaTableBuilder", slots = c(method = "character", ops = "list"))
+
+
+newDeltaTableBuilder <- function(method, collected_ops, ops) { # nolint
+  new(
+    "DeltaTableBuilder",
+    method = method,
+    ops = c(collected_ops, list(ops))
+  )
+}
 
 
 initializeDeltaTableBuilder <- function(initializer) { # nolint
   new(
     "DeltaTableBuilder",
-    jtb = invoke_delta_table_static(
-      initializer,
-      active_session()
-    )
+    method = initializer,
+    ops = list()
   )
 }
 
 
 #' Build DeltaTable
 #'
-#' @returns DeltaTableBuilder
+#' @returns InternalDeltaTableBuilder
 #'
 #' @export
 #' @note dlt_create, since 1.0.0
 dlt_create <- function() {
-  initializePureDeltaTableBuilder("create")
+  initializeDeltaTableBuilder("create")
 }
 
 
 #' Build DeltaTable if doesn't exits
 #'
-#' @returns DeltaTableBuilder
+#' @returns InternalDeltaTableBuilder
 #'
 #' @export
 #' @note dlt_create_if_not_exists, since 1.0.0
 dlt_create_if_not_exists <- function() {
-  initializePureDeltaTableBuilder("createIfNotExists")
+  initializeDeltaTableBuilder("createIfNotExists")
 }
 
 
 #' Replace DeltaTable
 #'
-#' @returns DeltaTableBuilder
+#' @returns InternalDeltaTableBuilder
 #'
 #' @export
 #' @note dlt_replace, since 1.0.0
 dlt_replace <- function() {
-  initializePureDeltaTableBuilder("replace")
+  initializeDeltaTableBuilder("replace")
 }
 
 
 #' Create or replace DeltaTable
 #'
-#' @returns DeltaTableBuilder
+#' @returns InternalDeltaTableBuilder
 #'
 #' @export
 #' @note dlt_create_or_replace, since 1.0.0
 dlt_create_or_replace <- function() {
-  initializePureDeltaTableBuilder("createOrReplace")
+  initializeDeltaTableBuilder("createOrReplace")
 }
 
 
 #' Execute merge operation on this builder
 #'
-#' @param bldr Delta table builder
+#' @param bldr DeltaTableBuilder
 #' @returns DeltaTable
 #'
 #' @name dlt_execute
@@ -107,19 +108,20 @@ setMethod(
   "dlt_execute",
   signature(bldr = "DeltaTableBuilder"),
   function(bldr) {
-    new(
-      "DeltaTable",
-      jdt = sparkR.callJMethod(bldr@jtb, "execute")
-    )
+    mut_bldr <- initializeInternalDeltaTableBuilder(bldr@method)
+    for (op in bldr@ops) {
+      do.call(op$.method, c(mut_bldr, op$args))
+    }
+    dlt_execute(mut_bldr)
   }
 )
 
 
 #' Specify data storage location for the build table.
 #'
-#' @param dtb Delta table builder
+#' @param dtb DeltaTableBuilder
 #' @param location character, path
-#' @return this DeltaTableBuilder
+#' @return DeltaTableBuilder
 #'
 #' @name dlt_location
 #' @rdname dlt_location
@@ -132,18 +134,20 @@ setMethod(
   signature(dtb = "DeltaTableBuilder", location = "character"),
   function(dtb, location) {
     validate_is_scalar_like_character(location)
-
-    sparkR.callJMethod(dtb@jtb, "location", location)
-    dtb
+    newDeltaTableBuilder(
+      dtb@method,
+      dtb@ops,
+      prepare_delayed_arg_list(.method = "dlt_location", location = location)
+    )
   }
 )
 
 
 #' Specify name of the build table.
 #'
-#' @param dtb Delta table builder
+#' @param dtb DeltaTableBuilder
 #' @param identifier character
-#' @return this DeltaTableBuilder
+#' @return DeltaTableBuilder
 #'
 #' @name dlt_table_name
 #' @rdname dlt_table_name
@@ -157,8 +161,11 @@ setMethod(
   function(dtb, identifier) {
     validate_is_scalar_like_character(identifier)
 
-    sparkR.callJMethod(dtb@jtb, "tableName", identifier)
-    dtb
+    newDeltaTableBuilder(
+      dtb@method,
+      dtb@ops,
+      prepare_delayed_arg_list(.method = "dlt_table_name", identifier = identifier)
+    )
   }
 )
 
@@ -166,14 +173,14 @@ setMethod(
 #' Add column to the build table
 #'
 #'
-#' @param dtb Delta table builder
+#' @param dtb DeltaTableBuilder
 #' @param col_name character
 #' @param data_type character
 #' @param nullable optional, logical
 #' @param generated_always_as optional, character
 #' @param comment optional, character
 #' @param ... other arguments, not used
-#' @return this DeltaTableBuilder
+#' @return DeltaTableBuilder
 #'
 #' @name dlt_add_column
 #' @rdname dlt_add_column
@@ -188,19 +195,15 @@ setMethod(
     validate_is_scalar_like_character(generated_always_as, nullable = TRUE)
     validate_is_scalar_like_character(comment, nullable = TRUE)
 
-    invoke_delta_table_static(
-      "columnBuilder",
-      active_session(),
-      col_name
-    ) %>%
-      sparkR.callJMethod("dataType", data_type) %>%
-      sparkR.callJMethod("nullable", nullable) %>%
-      invoke_if_arg_not_null("generatedAlwaysAs", generated_always_as) %>%
-      invoke_if_arg_not_null("comment", comment) %>%
-      sparkR.callJMethod("build") %>%
-      sparkR.callJMethod(dtb@jtb, "addColumn", .)
-
-    dtb
+    newDeltaTableBuilder(
+      dtb@method,
+      dtb@ops,
+      prepare_delayed_arg_list(
+        .method = "dlt_add_column",
+        col_name = col_name, data_type = data_type, nullable = nullable,
+        generated_always_as = generated_always_as, comment = comment
+      )
+    )
   }
 )
 
@@ -208,43 +211,37 @@ setMethod(
 #' Add column to the build table
 #'
 #'
-#' @param dtb Delta table builder
+#' @param dtb DeltaTableBuilder
 #' @param schema character (DDL string) or structType
-#' @return this DeltaTableBuilder
+#' @return DeltaTableBuilder
 #'
 #' @name dlt_add_columns
 #' @rdname dlt_add_columns
-#' @aliases dlt_add_columns,DeltaTableBuilder,structType-method
+#' @aliases dlt_add_columns,DeltaTableBuilder,ANY-method
 #'
 #' @export
 #' @note dlt_add_columns, since 1.0.0
 setMethod(
   "dlt_add_columns",
-  signature(dtb = "DeltaTableBuilder", schema = "structType"),
+  signature(dtb = "DeltaTableBuilder", schema = "ANY"),
   function(dtb, schema) {
-    sparkR.callJMethod(dtb@jtb, "addColumns", schema$jobj)
-    dtb
+    # Validate here, instead of having union of types to avoid unnecessary warnings
+    stopifnot(is.character(schema) || "structType" %in% class(schema))
+
+    newDeltaTableBuilder(
+      dtb@method,
+      dtb@ops,
+      prepare_delayed_arg_list(.method = "dlt_add_columns", schema = schema)
+    )
   }
 )
 
-
-#' @rdname dlt_add_columns
-#' @aliases dlt_add_columns,DeltaTableBuilder,character-method
-#'
-#' @export
-setMethod(
-  "dlt_add_columns",
-  signature(dtb = "DeltaTableBuilder", schema = "character"),
-  function(dtb, schema) {
-    dlt_add_columns(dtb, SparkR::structType(schema))
-  }
-)
 
 #' Add comment describing the build table.
 #'
-#' @param dtb Delta table builder
+#' @param dtb DeltaTableBuilder
 #' @param comment character, path
-#' @return this DeltaTableBuilder
+#' @return DeltaTableBuilder
 #'
 #' @name dlt_comment
 #' @rdname dlt_comment
@@ -258,15 +255,18 @@ setMethod(
   function(dtb, comment) {
     validate_is_scalar_like_character(comment)
 
-    sparkR.callJMethod(dtb@jtb, "comment", comment)
-    dtb
+    newDeltaTableBuilder(
+      dtb@method,
+      dtb@ops,
+      prepare_delayed_arg_list(.method = "dlt_comment", comment = comment)
+    )
   }
 )
 
 
 #' Specify partitioning columns
 #'
-#' @param dtb Delta table builder
+#' @param dtb DeltaTableBuilder
 #' @param ... character columns
 #'
 #' @name dlt_partitioned_by
@@ -279,17 +279,21 @@ setMethod(
   "dlt_partitioned_by",
   signature(dtb = "DeltaTableBuilder"),
   function(dtb, ...) {
-    cols <- prepare_and_validate_cols(...)
+    # Validate early
+    prepare_and_validate_cols(...)
 
-    sparkR.callJMethod(dtb@jtb, "partitionedBy", cols)
-    dtb
+    newDeltaTableBuilder(
+      dtb@method,
+      dtb@ops,
+      prepare_delayed_arg_list(.method = "dlt_partitioned_by", ...)
+    )
   }
 )
 
 
 #' Set property for the build table
 #'
-#' @param dtb Delta table builder
+#' @param dtb DeltaTableBuilder
 #' @param key character
 #' @param value character
 #'
@@ -306,7 +310,10 @@ setMethod(
     validate_is_scalar_like_character(key)
     validate_is_scalar_like_character(value)
 
-    sparkR.callJMethod(dtb@jtb, "property", key, value)
-    dtb
+    newDeltaTableBuilder(
+      dtb@method,
+      dtb@ops,
+      prepare_delayed_arg_list(.method = "dlt_property", key = key, value = value)
+    )
   }
 )

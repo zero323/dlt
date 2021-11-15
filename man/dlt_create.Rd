@@ -7,7 +7,7 @@
 dlt_create()
 }
 \value{
-DeltaTableBuilder
+InternalDeltaTableBuilder
 }
 \description{
 Build DeltaTable

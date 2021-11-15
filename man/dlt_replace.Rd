@@ -7,7 +7,7 @@
 dlt_replace()
 }
 \value{
-DeltaTableBuilder
+InternalDeltaTableBuilder
 }
 \description{
 Replace DeltaTable

@@ -5,22 +5,17 @@
 \alias{DeltaTableBuilder-class}
 \title{S4 class that represents pending table build operation}
 \description{
-This class is used primarily to support \code{PureDeltaTableBuilder}.
-Internally, it holds reference to a mutable Java \code{DeltaTableBuilder}
-and all implemented methods mutate it in place.
-While it is possible to use it directly, \code{PureDeltaTableBuilder}
-is preferred and provides the same API.
+S4 class that represents pending table build operation
 }
 \section{Slots}{
 
 \describe{
-\item{\code{jtb}}{A Java object reference to the backing DeltaTableBuilder}
+\item{\code{method}}{character name of the initializer method}
+
+\item{\code{ops}}{list list of operations in form of list(.method = ..., args = list(...))}
 }}
 
 \note{
 DeltaTableBuilder, since 1.0.0
-}
-\seealso{
-PureDeltaTableBuilder
 }
 \concept{DeltaTableBuilder functions}
