@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-#' @include generics.R table.R utils.R
+#' @include generics.R package.R utils.R table.R
 NULL
 
 

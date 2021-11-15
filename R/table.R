@@ -14,12 +14,8 @@
 # limitations under the License.
 #
 
-#' @include generics.R utils.R
+#' @include generics.R package.R utils.R
 NULL
-
-setOldClass("jobj")
-
-setClassUnion("characterOrList", members = c("character", "list"))
 
 
 #' S4 class that represents DeltaTable

@@ -34,4 +34,14 @@ NULL
 #' @importFrom SparkR sparkR.callJMethod sparkR.callJStatic
 NULL
 
+
+setOldClass("jobj")
+
+
+setOldClass("structType")
+
+
+setClassUnion("characterOrList", members = c("character", "list"))
+
+
 globalVariables(".")

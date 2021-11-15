@@ -14,10 +14,9 @@
 # limitations under the License.
 #
 
-#' @include generics.R table.R utils.R
+#' @include generics.R package.R utils.R
 NULL
 
-setOldClass("structType")
 
 #' S4 class that represents pending table build operation
 #'
