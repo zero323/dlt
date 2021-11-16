@@ -1,5 +1,9 @@
 url: ~
 
+
+authors:
+  "Maciej Szymkiewicz":
+    href: https://zero323.net
+
 template:
   package: preferably
-
