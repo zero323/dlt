@@ -96,7 +96,7 @@ dlt_for_path("/tmp/target") %>%
 
 Please keep in mind that, while convenient to write, such code can be harder to reason about and recover in case of coding error. Use with caution.
 
-## Function purity
+## DeltaTableBuilder semantics
 
 Scala and Python `DeltaTableBuilder` use a mutable state to build table definition. As a result, table partial table builder definitions are not suitable for reuse. For example, the following Scala code:
 
@@ -110,8 +110,13 @@ val parentBuilder = DeltaTable
     StructField("key", StringType), StructField("value", DoubleType))
   ))
 
-val firstChildBuilder = baseBuilder.tableName("first_child_table")
-val secondChildBuilder = baseBuilder.tableName("second_child_table")
+val firstChildBuilder = parentBuilder
+  .addColumn("first", "decimal(10, 2)")
+  .tableName("first_child_table")
+
+val secondChildBuilder = parentBuilder
+  .addColumn("second", "boolean")
+  .tableName("second_child_table")
 
 firstChildBuilder.execute()
 secondChildBuilder.execute()
@@ -125,21 +130,37 @@ org.apache.spark.sql.catalyst.analysis.TableAlreadyExistsException: Table defaul
 In contrast, `dlt` builder is free of side effects, and can be easily reused:
 
 ```{r, eval = FALSE}
-
 parent_builder <- dlt_create() %>%
   dlt_add_column("id", "integer") %>%
   dlt_add_columns(structType("key string, value double"))
 
-
 first_child_builder <- parent_builder %>%
-  dlt_table_name("first_child_table")
+  dlt_table_name("first_child_table") %>%
+  dlt_add_column("first", "decimal(10, 2)")
 
 second_child_builder <- parent_builder %>%
-  dlt_table_name("second_child_table")
+  dlt_table_name("second_child_table") %>%
+  dlt_add_column("second", "boolean")
 
 first_child_builder %>%
-  dlt_execute()
+  dlt_execute() %>%
+  dlt_to_df() %>%
+  schema()
+
+# StructType
+# |-name = "id", type = "IntegerType", nullable = TRUE
+# |-name = "key", type = "StringType", nullable = TRUE
+# |-name = "value", type = "DoubleType", nullable = TRUE
+# |-name = "first", type = "DecimalType(10,2)", nullable = TRUE
 
 second_child_builder %>%
-  dlt_execute()
+  dlt_execute() %>%
+  dlt_to_df() %>%
+  schema()
+
+# StructType
+# |-name = "id", type = "IntegerType", nullable = TRUE
+# |-name = "key", type = "StringType", nullable = TRUE
+# |-name = "value", type = "DoubleType", nullable = TRUE
+# |-name = "second", type = "BooleanType", nullable = TRUE
 ```
