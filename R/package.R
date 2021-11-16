@@ -14,14 +14,6 @@
 # limitations under the License.
 #
 
-#' Pipe
-#'
-#' @importFrom magrittr %>%
-#' @name %>%
-#' @export
-#' @rdname pipe
-NULL
-
 
 #' @importFrom methods new
 NULL
