@@ -1,2 +1,5 @@
 url: ~
 
+template:
+  package: preferably
+
