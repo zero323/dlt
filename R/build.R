@@ -27,6 +27,19 @@ NULL
 #' @slot method character name of the initializer method
 #' @slot ops list list of operations in form of list(.method = ..., args = list(...))
 #'
+#' @examples \dontrun{
+#'   path <- tempfile()
+#'
+#'   dlt_create() %>%
+#'     dlt_location(path) %>%
+#'     dlt_add_column("id", "integer", nullable = FALSE) %>%
+#'     dlt_add_columns(structType("key string, value double")) %>%
+#'     dlt_partitioned_by("key") %>%
+#'     dlt_comment("Key-value table") %>%
+#'     dlt_property("creation-time", as.character(Sys.time())) %>%
+#'     dlt_execute()
+#' }
+#'
 #' @note DeltaTableBuilder, since 1.0.0
 setClass("DeltaTableBuilder", slots = c(method = "character", ops = "list"))
 
@@ -122,8 +135,7 @@ setMethod(
 #' @param location character, path
 #' @return DeltaTableBuilder
 #'
-#' @name dlt_location
-#' @rdname dlt_location
+#' @describeIn dlt-location-table-builder Specify data storage location
 #' @aliases dlt_location,DeltaTableBuilder,character-method
 #'
 #' @export
@@ -148,8 +160,7 @@ setMethod(
 #' @param identifier character
 #' @return DeltaTableBuilder
 #'
-#' @name dlt_table_name
-#' @rdname dlt_table_name
+#' @describeIn dlt-table-name-table-builder Specify name of the table
 #' @aliases dlt_table_name,DeltaTableBuilder,character-method
 #'
 #' @export
@@ -178,11 +189,9 @@ setMethod(
 #' @param nullable optional, logical
 #' @param generated_always_as optional, character
 #' @param comment optional, character
-#' @param ... other arguments, not used
 #' @return DeltaTableBuilder
 #'
-#' @name dlt_add_column
-#' @rdname dlt_add_column
+#' @describeIn dlt-add-column-table-builder Add column to the table
 #' @aliases dlt_add_column,DeltaTableBuilder,character,character-method
 #'
 #' @export
@@ -207,15 +216,14 @@ setMethod(
 )
 
 
-#' Add column to the build table
+#' Add columns to the build table
 #'
 #'
 #' @param dtb DeltaTableBuilder
 #' @param schema character (DDL string) or structType
 #' @return DeltaTableBuilder
 #'
-#' @name dlt_add_columns
-#' @rdname dlt_add_columns
+#' @describeIn dlt-add-columns-table-builder Add columns to the table
 #' @aliases dlt_add_columns,DeltaTableBuilder,ANY-method
 #'
 #' @export
@@ -242,8 +250,7 @@ setMethod(
 #' @param comment character, path
 #' @return DeltaTableBuilder
 #'
-#' @name dlt_comment
-#' @rdname dlt_comment
+#' @describeIn dlt-add-comment-table-builder Add comment
 #' @aliases dlt_comment,DeltaTableBuilder,character-method
 #'
 #' @export
@@ -268,8 +275,7 @@ setMethod(
 #' @param dtb DeltaTableBuilder
 #' @param ... character columns
 #'
-#' @name dlt_partitioned_by
-#' @rdname dlt_partitioned_by
+#' @describeIn dlt-partitioned-by-table-builder Specify partitioning
 #' @aliases dlt_partitioned_by,DeltaTableBuilder-method
 #'
 #' @export
@@ -296,8 +302,7 @@ setMethod(
 #' @param key character
 #' @param value character
 #'
-#' @name dlt_property
-#' @rdname dlt_property
+#' @describeIn dlt-dlt-property-table-builder Set property
 #' @aliases dlt_property,DeltaTableBuilder,character,character-method
 #'
 #' @export

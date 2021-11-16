@@ -108,6 +108,7 @@ setGeneric("dlt_merge", function(dt, source, condition) {
 #'
 #' @param bldr a builder object
 #'
+#' @keywords internal
 #' @name dlt_execute
 #' @rdname dlt_execute
 setGeneric(
@@ -167,7 +168,9 @@ setGeneric(
   }
 )
 
-
+#' Specify data storage location for dtb
+#'
+#' @keywords internal
 #' @name dlt_location
 #' @rdname dlt_location
 setGeneric(
@@ -177,7 +180,9 @@ setGeneric(
   }
 )
 
-
+#' Specify name for dtb
+#'
+#' @keywords internal
 #' @name dlt_table_name
 #' @rdname dlt_table_name
 setGeneric(
@@ -188,6 +193,9 @@ setGeneric(
 )
 
 
+#' Add column to the table
+#'
+#' @keywords internal
 #' @name dlt_add_column
 #' @rdname dlt_add_column
 setGeneric(
@@ -197,7 +205,9 @@ setGeneric(
   }
 )
 
-
+#' Add columns to the build table
+#'
+#' @keywords internal
 #' @name dlt_add_columns
 #' @rdname dlt_add_columns
 setGeneric(
@@ -207,7 +217,9 @@ setGeneric(
   }
 )
 
-
+#' Add comment
+#'
+#' @keywords internal
 #' @name dlt_comment
 #' @rdname dlt_comment
 setGeneric(
@@ -217,7 +229,9 @@ setGeneric(
   }
 )
 
-
+#' Specify partitioning
+#'
+#' @keywords internal
 #' @name dlt_partitioned_by
 #' @rdname dlt_partitioned_by
 setGeneric(
@@ -227,7 +241,9 @@ setGeneric(
   }
 )
 
-
+#' Set property
+#'
+#' @keywords internal
 #' @name dlt_property
 #' @rdname dlt_property
 setGeneric(

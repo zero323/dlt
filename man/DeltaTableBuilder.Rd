@@ -18,4 +18,19 @@ S4 class that represents pending table build operation
 \note{
 DeltaTableBuilder, since 1.0.0
 }
+\examples{
+\dontrun{
+  path <- tempfile()
+
+  dlt_create() \%>\%
+    dlt_location(path) \%>\%
+    dlt_add_column("id", "integer", nullable = FALSE) \%>\%
+    dlt_add_columns(structType("key string, value double")) \%>\%
+    dlt_partitioned_by("key") \%>\%
+    dlt_comment("Key-value table") \%>\%
+    dlt_property("creation-time", as.character(Sys.time())) \%>\%
+    dlt_execute()
+}
+
+}
 \concept{DeltaTableBuilder functions}

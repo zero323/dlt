@@ -77,10 +77,10 @@ setMethod(
 #' @param location character, path
 #' @return this InternalDeltaTableBuilder
 #'
-#' @name dlt_location
-#' @rdname dlt_location
+#' @describeIn dlt-location-table-builder-internal Specify data storage location
 #' @aliases dlt_location,InternalDeltaTableBuilder,character-method
 #'
+#' @keywords internal
 #' @export
 #' @note dlt_location, since 1.0.0
 setMethod(
@@ -101,10 +101,10 @@ setMethod(
 #' @param identifier character
 #' @return this InternalDeltaTableBuilder
 #'
-#' @name dlt_table_name
-#' @rdname dlt_table_name
+#' @describeIn dlt-table-name-table-builder-internal Specify name of the table
 #' @aliases dlt_table_name,InternalDeltaTableBuilder,character-method
 #'
+#' @keywords internal
 #' @export
 #' @note dlt_table_name, since 1.0.0
 setMethod(
@@ -131,10 +131,10 @@ setMethod(
 #' @param ... other arguments, not used
 #' @return this InternalDeltaTableBuilder
 #'
-#' @name dlt_add_column
-#' @rdname dlt_add_column
+#' @describeIn dlt-add-column-table-builder-internal Add column to the table
 #' @aliases dlt_add_column,InternalDeltaTableBuilder,character,character-method
 #'
+#' @keywords internal
 #' @export
 #' @note dlt_add_column, since 1.0.0
 setMethod(
@@ -161,17 +161,17 @@ setMethod(
 )
 
 
-#' Add column to the build table
+#' Add columns to the build table
 #'
 #'
 #' @param dtb InternalDeltaTableBuilder
 #' @param schema character (DDL string) or structType
 #' @return this InternalDeltaTableBuilder
 #'
-#' @name dlt_add_columns
-#' @rdname dlt_add_columns
+#' @describeIn dlt-add-columns-table-builder-internal Add columns to the table
 #' @aliases dlt_add_columns,InternalDeltaTableBuilder,structType-method
 #'
+#' @keywords internal
 #' @export
 #' @note dlt_add_columns, since 1.0.0
 setMethod(
@@ -184,9 +184,10 @@ setMethod(
 )
 
 
-#' @rdname dlt_add_columns
+#' @describeIn dlt-add-columns-table-builder-internal Add columns to the table
 #' @aliases dlt_add_columns,InternalDeltaTableBuilder,character-method
 #'
+#' @keywords internal
 #' @export
 setMethod(
   "dlt_add_columns",
@@ -202,10 +203,10 @@ setMethod(
 #' @param comment character, path
 #' @return this InternalDeltaTableBuilder
 #'
-#' @name dlt_comment
-#' @rdname dlt_comment
+#' @describeIn dlt-add-comment-table-builder-internal Add comment
 #' @aliases dlt_comment,InternalDeltaTableBuilder,character-method
 #'
+#' @keywords internal
 #' @export
 #' @note dlt_comment, since 1.0.0
 setMethod(
@@ -225,10 +226,10 @@ setMethod(
 #' @param dtb InternalDeltaTableBuilder
 #' @param ... character columns
 #'
-#' @name dlt_partitioned_by
-#' @rdname dlt_partitioned_by
+#' @describeIn dlt-partitioned-by-table-builder-internal Specify partitioning
 #' @aliases dlt_partitioned_by,InternalDeltaTableBuilder-method
 #'
+#' @keywords internal
 #' @export
 #' @note dlt_partitioned_by, since 1.0.0
 setMethod(
@@ -249,10 +250,10 @@ setMethod(
 #' @param key character
 #' @param value character
 #'
-#' @name dlt_property
-#' @rdname dlt_property
+#' @describeIn dlt-dlt-property-table-builder-internal Set property
 #' @aliases dlt_property,InternalDeltaTableBuilder,character,character-method
 #'
+#' @keywords internal
 #' @export
 #' @note dlt_property, since 1.0.0
 setMethod(
