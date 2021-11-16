@@ -18,24 +18,24 @@
 #'
 #' @noRd
 expect_sdf_equivalent <- function(actual, expected) {
-  act <- quasi_label(rlang::enquo(actual), arg = "actual")
+  act <- quasi_label(rlang::enquo(actual), arg = "actual") # nolint
   exp <- quasi_label(rlang::enquo(expected), arg = "expected") # nolint
 
 
   actual_minus_expected <- SparkR::exceptAll(actual, expected)
 
   if (SparkR::count(actual_minus_expected) != 0) {
-    fail("Actual contains rows not present in expected")
+    fail("Actual contains rows not present in expected") # nolint
   }
 
 
   expected_minus_actual <- SparkR::exceptAll(expected, actual)
 
   if (SparkR::count(expected_minus_actual) != 0) {
-    fail("Expected contains rows not present in actual")
+    fail("Expected contains rows not present in actual") # nolint
   }
 
-  succeed()
+  succeed() # nolint
   invisible(act$val)
 }
 
@@ -44,7 +44,7 @@ expect_sdf_equivalent <- function(actual, expected) {
 #'
 #' @noRd
 expect_collected_sdf_equivalent <- function(actual, expected, ordering = "id") {
-  act <- quasi_label(rlang::enquo(actual), arg = "actual")
+  act <- quasi_label(rlang::enquo(actual), arg = "actual") # nolint
   exp <- quasi_label(rlang::enquo(expected), arg = "expected") # nolint
 
 
