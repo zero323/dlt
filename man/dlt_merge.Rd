@@ -4,7 +4,7 @@
 \alias{dlt_merge}
 \alias{dlt_merge,DeltaTable,SparkDataFrame,Column-method}
 \alias{dlt_merge,DeltaTable,SparkDataFrame,character-method}
-\title{Merge data from sourc with this DataTable, based on condition}
+\title{Merge data from source with this DataTable, based on condition}
 \usage{
 dlt_merge(dt, source, condition)
 
@@ -23,7 +23,7 @@ dlt_merge(dt, source, condition)
 DeltaMergeBuilder
 }
 \description{
-Merge data from sourc with this DataTable, based on condition
+Merge data from source with this DataTable, based on condition
 }
 \note{
 dlt_merge, since 1.0.0

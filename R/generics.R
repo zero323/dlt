@@ -104,7 +104,10 @@ setGeneric("dlt_merge", function(dt, source, condition) {
   standardGeneric("dlt_merge")
 })
 
-
+#' Execute pending operation on a builder
+#'
+#' @param bldr a builder object
+#'
 #' @name dlt_execute
 #' @rdname dlt_execute
 setGeneric(

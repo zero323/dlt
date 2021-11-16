@@ -93,13 +93,12 @@ dlt_create_or_replace <- function() {
 }
 
 
-#' Execute merge operation on this builder
+#' Execute build operation on this builder
 #'
 #' @param bldr DeltaTableBuilder
 #' @returns DeltaTable
 #'
-#' @name dlt_execute
-#' @rdname dlt_execute
+#' @describeIn dlt-execute-table-builder Execute build operation
 #' @aliases dlt_execute,DeltaTableBuilder-method
 #'
 #' @export

@@ -461,7 +461,7 @@ setMethod(
 )
 
 
-#' Merge data from sourc with this DataTable, based on condition
+#' Merge data from source with this DataTable, based on condition
 #'
 #' @param dt DeltaTable
 #' @param source SparkDataFrame

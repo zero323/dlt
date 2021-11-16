@@ -32,6 +32,7 @@ NULL
 #'
 #' @slot jtb A Java object reference to the backing InternalDeltaTableBuilder
 #'
+#' @keywords internal
 #' @note InternalDeltaTableBuilder, since 1.0.0
 #' @seealso DeltaTableBuilder
 setClass("InternalDeltaTableBuilder", slots = c(jtb = "jobj"))
@@ -48,16 +49,15 @@ initializeInternalDeltaTableBuilder <- function(initializer) { # nolint
 }
 
 
-#' Execute merge operation on this builder
+#' Execute internal build operation on this builder
 #'
 #' @param bldr InternalDeltaTableBuilder
 #' @returns DeltaTable
 #'
-#' @name dlt_execute
-#' @rdname dlt_execute
+#' @describeIn dlt-execute-table-builder-internal Execute internal build
 #' @aliases dlt_execute,InternalDeltaTableBuilder-method
 #'
-#' @export
+#' @keywords internal
 #' @note dlt_execute, since 1.0.0
 setMethod(
   "dlt_execute",

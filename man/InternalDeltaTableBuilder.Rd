@@ -24,3 +24,4 @@ InternalDeltaTableBuilder, since 1.0.0
 DeltaTableBuilder
 }
 \concept{InternalDeltaTableBuilder functions}
+\keyword{internal}
