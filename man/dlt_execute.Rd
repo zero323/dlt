@@ -12,4 +12,3 @@ dlt_execute(bldr)
 \description{
 Execute pending operation on a builder
 }
-\keyword{internal}

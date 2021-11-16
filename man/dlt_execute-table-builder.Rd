@@ -23,3 +23,6 @@ Execute build operation on this builder
 \note{
 dlt_execute, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTableBuilder}
+}

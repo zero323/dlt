@@ -21,13 +21,13 @@ NULL
 #' S4 class that represents pending table build operation
 #'
 #' @family DeltaTableBuilder functions
-#' @rdname DeltaTableBuilder
 #' @docType class
 #'
 #' @slot method character name of the initializer method
 #' @slot ops list list of operations in form of list(.method = ..., args = list(...))
 #'
 #' @examples \dontrun{
+#'   # Create DeltaTable in a given location
 #'   path <- tempfile()
 #'
 #'   dlt_create() %>%
@@ -38,8 +38,17 @@ NULL
 #'     dlt_comment("Key-value table") %>%
 #'     dlt_property("creation-time", as.character(Sys.time())) %>%
 #'     dlt_execute()
+#'
+#'   # Create DeltaTable with given table name
+#'   table_name <- paste0("delta_table_", paste(base::sample(letters, 10, TRUE), collapse=""))
+#'
+#'   dlt_create() %>%
+#'     dlt_table_name(table_name) %>%
+#'     dlt_add_column("id", "integer") %>%
+#'     dlt_execute()
 #' }
 #'
+#' @seealso [dlt_create()], [dlt_create_if_not_exists()], [dlt_replace()], [dlt_create_or_replace()]
 #' @note DeltaTableBuilder, since 1.0.0
 setClass("DeltaTableBuilder", slots = c(method = "character", ops = "list"))
 
@@ -62,9 +71,18 @@ initializeDeltaTableBuilder <- function(initializer) { # nolint
 }
 
 
-#' Build DeltaTable
+#' Initalize new DeltaTableBuilder
 #'
-#' @returns InternalDeltaTableBuilder
+#' @return DeltaTableBuilder
+#'
+#' @name dlt_initialize_delta_table_builder
+#' @rdname dlt_initialize_delta_table_builder
+#' @seealso [DeltaTableBuilder-class]
+NULL
+
+
+#' @describeIn dlt_initialize_delta_table_builder On execute, creates a new DeltaTable if it dosen't exist,
+#'   otherwise throws an exception.
 #'
 #' @export
 #' @note dlt_create, since 1.0.0
@@ -73,9 +91,8 @@ dlt_create <- function() {
 }
 
 
-#' Build DeltaTable if doesn't exits
-#'
-#' @returns InternalDeltaTableBuilder
+#' @describeIn dlt_initialize_delta_table_builder On execute, creates a new DeltaTable if it dosen't exist,
+#'   otherwise does nothing.
 #'
 #' @export
 #' @note dlt_create_if_not_exists, since 1.0.0
@@ -84,9 +101,8 @@ dlt_create_if_not_exists <- function() {
 }
 
 
-#' Replace DeltaTable
-#'
-#' @returns InternalDeltaTableBuilder
+#' @describeIn dlt_initialize_delta_table_builder On execute, replaces DeltaTable if it exists,
+#'   otherwise throws an exception.
 #'
 #' @export
 #' @note dlt_replace, since 1.0.0
@@ -95,9 +111,8 @@ dlt_replace <- function() {
 }
 
 
-#' Create or replace DeltaTable
-#'
-#' @returns InternalDeltaTableBuilder
+#' @describeIn dlt_initialize_delta_table_builder On execute, replaces DeltaTable if it exists,
+#'   otherwise creates a new DeltaTable
 #'
 #' @export
 #' @note dlt_create_or_replace, since 1.0.0
@@ -111,10 +126,11 @@ dlt_create_or_replace <- function() {
 #' @param bldr DeltaTableBuilder
 #' @returns DeltaTable
 #'
-#' @describeIn dlt-execute-table-builder Execute build operation
+#' @describeIn dlt_execute-table-builder Execute build operation
 #' @aliases dlt_execute,DeltaTableBuilder-method
 #'
 #' @export
+#' @seealso [DeltaTableBuilder-class]
 #' @note dlt_execute, since 1.0.0
 setMethod(
   "dlt_execute",
@@ -135,10 +151,12 @@ setMethod(
 #' @param location character, path
 #' @return DeltaTableBuilder
 #'
-#' @describeIn dlt-location-table-builder Specify data storage location
+#' @name dlt_location
+#' @rdname dlt_location
 #' @aliases dlt_location,DeltaTableBuilder,character-method
 #'
 #' @export
+#' @seealso [DeltaTableBuilder-class]
 #' @note dlt_location, since 1.0.0
 setMethod(
   "dlt_location",
@@ -160,10 +178,12 @@ setMethod(
 #' @param identifier character
 #' @return DeltaTableBuilder
 #'
-#' @describeIn dlt-table-name-table-builder Specify name of the table
+#' @name dlt_table_name
+#' @rdname dlt_table_name
 #' @aliases dlt_table_name,DeltaTableBuilder,character-method
 #'
 #' @export
+#' @seealso [DeltaTableBuilder-class]
 #' @note dlt_table_name, since 1.0.0
 setMethod(
   "dlt_table_name",
@@ -191,10 +211,12 @@ setMethod(
 #' @param comment optional, character
 #' @return DeltaTableBuilder
 #'
-#' @describeIn dlt-add-column-table-builder Add column to the table
+#' @name dlt_add_column
+#' @rdname dlt_add_column
 #' @aliases dlt_add_column,DeltaTableBuilder,character,character-method
 #'
 #' @export
+#' @seealso [DeltaTableBuilder-class]
 #' @note dlt_add_column, since 1.0.0
 setMethod(
   "dlt_add_column",
@@ -223,10 +245,12 @@ setMethod(
 #' @param schema character (DDL string) or structType
 #' @return DeltaTableBuilder
 #'
-#' @describeIn dlt-add-columns-table-builder Add columns to the table
+#' @name dlt_add_columns
+#' @rdname dlt_add_columns
 #' @aliases dlt_add_columns,DeltaTableBuilder,ANY-method
 #'
 #' @export
+#' @seealso [DeltaTableBuilder-class]
 #' @note dlt_add_columns, since 1.0.0
 setMethod(
   "dlt_add_columns",
@@ -250,10 +274,12 @@ setMethod(
 #' @param comment character, path
 #' @return DeltaTableBuilder
 #'
-#' @describeIn dlt-add-comment-table-builder Add comment
+#' @name dlt_comment
+#' @rdname dlt_comment
 #' @aliases dlt_comment,DeltaTableBuilder,character-method
 #'
 #' @export
+#' @seealso [DeltaTableBuilder-class]
 #' @note dlt_comment, since 1.0.0
 setMethod(
   "dlt_comment",
@@ -275,10 +301,12 @@ setMethod(
 #' @param dtb DeltaTableBuilder
 #' @param ... character columns
 #'
-#' @describeIn dlt-partitioned-by-table-builder Specify partitioning
+#' @name dlt_partitioned_by
+#' @rdname dlt_partitioned_by
 #' @aliases dlt_partitioned_by,DeltaTableBuilder-method
 #'
 #' @export
+#' @seealso [DeltaTableBuilder-class]
 #' @note dlt_partitioned_by, since 1.0.0
 setMethod(
   "dlt_partitioned_by",
@@ -302,10 +330,12 @@ setMethod(
 #' @param key character
 #' @param value character
 #'
-#' @describeIn dlt-dlt-property-table-builder Set property
+#' @name dlt_property
+#' @rdname dlt_property
 #' @aliases dlt_property,DeltaTableBuilder,character,character-method
 #'
 #' @export
+#' @seealso [DeltaTableBuilder-class]
 #' @note dlt_property, since 1.0.0
 setMethod(
   "dlt_property",

@@ -20,6 +20,7 @@ DeltaTableBuilder, since 1.0.0
 }
 \examples{
 \dontrun{
+  # Create DeltaTable in a given location
   path <- tempfile()
 
   dlt_create() \%>\%
@@ -30,7 +31,18 @@ DeltaTableBuilder, since 1.0.0
     dlt_comment("Key-value table") \%>\%
     dlt_property("creation-time", as.character(Sys.time())) \%>\%
     dlt_execute()
+
+  # Create DeltaTable with given table name
+  table_name <- paste0("delta_table_", paste(base::sample(letters, 10, TRUE), collapse=""))
+
+  dlt_create() \%>\%
+    dlt_table_name(table_name) \%>\%
+    dlt_add_column("id", "integer") \%>\%
+    dlt_execute()
 }
 
+}
+\seealso{
+\code{\link[=dlt_create]{dlt_create()}}, \code{\link[=dlt_create_if_not_exists]{dlt_create_if_not_exists()}}, \code{\link[=dlt_replace]{dlt_replace()}}, \code{\link[=dlt_create_or_replace]{dlt_create_or_replace()}}
 }
 \concept{DeltaTableBuilder functions}
