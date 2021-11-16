@@ -42,7 +42,7 @@ newDeltaMergeBuilder <- function(x, .target) { # nolint
 #' Execute merge operation on this builder
 #'
 #' @param bldr DeltaMergeBuilder
-#' @returns NULL, invisibly
+#' @returns target DeltaTable, invisibly
 #'
 #' @name dlt_execute
 #' @rdname dlt_execute

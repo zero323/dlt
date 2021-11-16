@@ -24,7 +24,7 @@ DeltaTable
 
 DeltaTable
 
-NULL, invisibly
+target DeltaTable, invisibly
 }
 \description{
 Execute merge operation on this builder
