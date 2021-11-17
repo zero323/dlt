@@ -18,18 +18,42 @@
 NULL
 
 
-#' Create a SparkDataFrame from a Delta Table
+#' Write and read SparkDataFrame in delta format
 #'
-#' Loads a DeltaTable, returning the result as a SparkDataFrame.
+#' @name dlt_readwrite
+#' @rdname dlt_readwrite
 #'
+#' @examples \dontrun{
+#' set.seed(323)
+#' path <- tempfile()
+#'
+#' df <- data.frame(
+#'   id = 1:12,
+#'   key = rep(c("a", "b", "c"), each = 4),
+#'   value = rnorm(12)
+#' ) %>%
+#'   createDataFrame()
+#'
+#' createDataFrame(df) %>%
+#'   dlt_write(path)
+#'
+#' dlt_read(path) %>%
+#'   schema()
+#'
+#' createDataFrame(df) %>%
+#'   write.delta(path, mode = "overwrite")
+#'
+#' read.delta(path) %>%
+#'   schema()
+#' }
+NULL
+
+
+
 #' @param path path of file to read.
 #' @param ... additional data source specific named properties.
-#' @rdname dlt_read
-#' @name dlt_read
-#' @examples
-#' \dontrun{
-#' dlt_read("/tmp/iris-delta")
-#' }
+#' @describeIn dlt_readwrite Load data stored as delta into `SparkDataFrame`
+#'
 #' @export
 #' @note dlt_read since 1.0.0
 dlt_read <- function(path, ...) {
@@ -37,41 +61,24 @@ dlt_read <- function(path, ...) {
 }
 
 
-#' Create a SparkDataFrame from a Delta Table
-#'
-#' Loads a DeltaTable, returning the result as a SparkDataFrame.
-#'
 #' @param path path of file to read.
 #' @param ... additional data source specific named properties.
-#' @rdname read.delta
-#' @name read.delta
-#' @note read.delta since 1.0.0
-#' @examples
-#' \dontrun{
-#' read.delta("/tmp/iris-delta")
-#' }
+#' @describeIn dlt_readwrite Load data stored as delta into `SparkDataFrame` (alias of `dlt_read`)
+#'
 #' @export
-#' @seealso dlt_read
+#' @note read.delta since 1.0.0
 read.delta <- function(path, ...) { # nolint
   dlt_read(path, ...)
 }
 
 
-#' Write SparkDataFrame to Delta
-#'
-#' Writes SparkDataFrame to Delta.
-#'
 #' @param df SparkDataFrame
 #' @param path character path to write the data.
 #' @param ... additional arguments passed to writer
-#' @rdname dlt_write
-#' @name dlt_write
+#'
+#' @describeIn dlt_readwrite Write SparkDataFrame` in delta format
 #' @aliases dlt_write,SparkDataFrame,character-method
-#' @examples
-#' \dontrun{
-#' SparkR::createDataFrame(iris) %>%
-#'   dlt_write("/tmp/iris-delta")
-#' }
+#'
 #' @export
 #' @note dlt_write since 1.0.0
 setMethod(
@@ -83,24 +90,15 @@ setMethod(
 )
 
 
-#' Write SparkDataFrame to Delta
-#'
-#' Writes SparkDataFrame to Delta.
-#'
 #' @param df SparkDataFrame
 #' @param path character path to write the data.
 #' @param ... additional arguments passed to writer
-#' @rdname write.delta
-#' @name write.delta
+#'
+#' @describeIn dlt_readwrite Write `SparkDataFrame` in delta format (alias of `dlt_write`)
 #' @aliases write.delta,SparkDataFrame,character-method
-#' @examples
-#' \dontrun{
-#' SparkR::createDataFrame(iris) %>%
-#'   write.delta("/tmp/iris-delta")
-#' }
+#'
 #' @export
 #' @note write.delta since 1.0.0
-#' @seealso dlt_write
 setMethod(
   "write.delta",
   signature(df = "SparkDataFrame", path = "character"),

@@ -14,15 +14,13 @@
 # limitations under the License.
 #
 
-#' @name dlt_write
-#' @rdname dlt_write
+#' @describeIn dlt_readwrite Generic
 setGeneric("dlt_write", function(df, path, ...) {
   standardGeneric("dlt_write")
 })
 
 
-#' @name write.delta
-#' @rdname write.delta
+#' @describeIn dlt_readwrite Generic
 setGeneric("write.delta", function(df, path, ...) {
   standardGeneric("write.delta")
 })
