@@ -18,3 +18,6 @@ Create DeltaTable for a given name
 \note{
 dlt_for_name, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

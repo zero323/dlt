@@ -21,3 +21,6 @@ Get SparkDataFrame corresponding to DeltaTable
 \note{
 dlt_to_df, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

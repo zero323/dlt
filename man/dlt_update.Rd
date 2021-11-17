@@ -31,3 +31,6 @@ Update data in this DataTable
 \note{
 dlt_update, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

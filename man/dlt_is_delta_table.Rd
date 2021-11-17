@@ -21,3 +21,6 @@ Check if path corresponds to a DeltaTable
 \note{
 dlt_is_delta_table, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

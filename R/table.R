@@ -21,10 +21,54 @@ NULL
 #' S4 class that represents DeltaTable
 #'
 #' @family DeltaTable functions
-#' @rdname DeltaTable
 #' @docType class
 #'
 #' @slot jdt A Java object reference to the backing DeltaTable
+#'
+#' @examples \dontrun{
+#' set.seed(323)
+#'
+#' # Write to file system and read back
+#' tbl_path <- tempfile()
+#'
+#' df <- data.frame(
+#'   id = 1:12,
+#'   key = rep(c("a", "b", "c"), each = 4),
+#'   value = rnorm(12)
+#' ) %>%
+#'   createDataFrame()
+#'
+#' df %>%
+#'   dlt_write(tbl_path)
+#'
+#' dlt_for_path(tbl_path) %>%
+#'   dlt_to_df() %>%
+#'   printSchema()
+#'
+#'
+#' # Write as table and read back
+#' tbl_name <- paste0("delta_table_", paste0(base::sample(letters, 10, TRUE), collapse = ""))
+#'
+#' df %>%
+#'   saveAsTable(tableName = tbl_name, source = "delta")
+#'
+#' tbl <- dlt_for_name(tbl_name)
+#' tbl %>%
+#'   dlt_show()
+#'
+#'
+#' # Update tbl
+#' tbl %>%
+#'   dlt_delete("id in (1, 3)") %>%
+#'   dlt_update(c(value = "-value"), "key = 'c'")
+#'
+#'
+#' # Check delta log
+#' tbl %>%
+#'   dlt_history() %>%
+#'   select("version", "timestamp", "operation", "operationParameters") %>%
+#'   showDF(truncate = FALSE)
+#' }
 #'
 #' @note DeltaTable since 1.0.0
 setClass("DeltaTable", slots = c(jdt = "jobj"))
@@ -40,6 +84,7 @@ setClass("DeltaTable", slots = c(jdt = "jobj"))
 #' @aliases dlt_to_df,DeltaTable-method
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_to_df, since 1.0.0
 setMethod(
   "dlt_to_df",
@@ -62,6 +107,7 @@ setMethod(
 #' @returns DeltaTable
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_for_name, since 1.0.0
 dlt_for_name <- function(name) {
   new("DeltaTable",
@@ -81,6 +127,7 @@ dlt_for_name <- function(name) {
 #' @returns DeltaTable
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_for_path, since 1.0.0
 dlt_for_path <- function(path) {
   new("DeltaTable",
@@ -103,6 +150,7 @@ dlt_for_path <- function(path) {
 #' @aliases dlt_alias,DeltaTable,character-method
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_alias, since 1.0.0
 setMethod(
   "dlt_alias",
@@ -130,6 +178,7 @@ setMethod(
 #' @aliases dlt_delete,DeltaTable,missing-method
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_delete, since 1.0.0
 setMethod(
   "dlt_delete",
@@ -184,6 +233,7 @@ setMethod(
 #' @aliases dlt_update,DeltaTable,characterOrList,missing-method
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_update, since 1.0.0
 setMethod(
   "dlt_update",
@@ -253,6 +303,7 @@ setMethod(
 #' @aliases dlt_is_delta_table,character-method
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_is_delta_table, since 1.0.0
 setMethod(
   "dlt_is_delta_table",
@@ -278,6 +329,7 @@ setMethod(
 #' @aliases dlt_history,DeltaTable,missing-method
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_history, since 1.0.0
 setMethod(
   "dlt_history",
@@ -330,6 +382,7 @@ setMethod(
 #' }
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_convert_to_delta, since 1.0.0
 setMethod(
   "dlt_convert_to_delta",
@@ -379,6 +432,7 @@ setMethod(
 #' @aliases dlt_vacuum,DeltaTable,missing-method
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_vacuum, since 1.0.0
 setMethod(
   "dlt_vacuum",
@@ -416,6 +470,7 @@ setMethod(
 #' @aliases dlt_upgrade_table_protocol,DeltaTable,numeric,numeric-method
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_upgrade_table_protocol, since 1.0.0
 setMethod(
   "dlt_upgrade_table_protocol",
@@ -446,6 +501,7 @@ setMethod(
 #' @aliases dlt_generate_manifest,DeltaTable,character-method
 #'
 #' @export
+#' @seealso [DeltaTable-class]
 #' @note dlt_generate_manifest, since 1.0.0
 setMethod(
   "dlt_generate_manifest",
@@ -473,6 +529,7 @@ setMethod(
 #' @aliases dlt_merge,DeltaTable,SparkDataFrame,Column-method
 #'
 #' @export
+#' @seealso [DeltaTable-class], [DeltaMergeBuilder-class]
 #' @note dlt_merge, since 1.0.0
 setMethod(
   "dlt_merge",

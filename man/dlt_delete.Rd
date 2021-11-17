@@ -30,3 +30,6 @@ Removes data that matches optional condition
 \note{
 dlt_delete, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

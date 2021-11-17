@@ -38,3 +38,6 @@ dlt_convert_to_delta("parquet.`/tmp/iris-non-delta`") \%>\%
 }
 
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

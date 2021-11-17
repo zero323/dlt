@@ -25,3 +25,6 @@ Upgrade protocol version of this DeltaTable
 \note{
 dlt_upgrade_table_protocol, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

@@ -23,3 +23,6 @@ Set alias for this DeltaTable
 \note{
 dlt_alias, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

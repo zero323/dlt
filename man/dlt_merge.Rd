@@ -28,3 +28,6 @@ Merge data from source with this DataTable, based on condition
 \note{
 dlt_merge, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}, \linkS4class{DeltaMergeBuilder}
+}

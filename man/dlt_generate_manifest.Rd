@@ -23,3 +23,6 @@ Generate manifest files for this DeltaTable
 \note{
 dlt_generate_manifest, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

@@ -18,3 +18,6 @@ Create DeltaTable using given path
 \note{
 dlt_for_path, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

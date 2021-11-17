@@ -26,3 +26,6 @@ Get commit history for this DeltaTable
 \note{
 dlt_history, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}

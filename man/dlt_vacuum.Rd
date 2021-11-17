@@ -26,3 +26,6 @@ Vacuum this DeltaTable
 \note{
 dlt_vacuum, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaTable}
+}
