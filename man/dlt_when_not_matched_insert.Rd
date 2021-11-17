@@ -31,3 +31,6 @@ Insert a new row based the set of rules
 \note{
 dlt_when_not_matched_insert, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaMergeBuilder}
+}

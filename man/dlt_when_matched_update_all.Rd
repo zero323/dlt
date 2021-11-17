@@ -29,3 +29,6 @@ Update all columns of the matched table
 \note{
 dlt_when_matched_update_all, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaMergeBuilder}
+}

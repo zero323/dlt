@@ -32,7 +32,7 @@ DeltaTableBuilder, since 1.0.0
     dlt_property("creation-time", as.character(Sys.time())) \%>\%
     dlt_execute()
 
-  # Create DeltaTable with given table name
+  # Create DeltaTable with a given table name
   table_name <- paste0("delta_table_", paste(base::sample(letters, 10, TRUE), collapse=""))
 
   dlt_create() \%>\%

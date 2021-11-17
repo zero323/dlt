@@ -29,3 +29,6 @@ Insert a new row if not source not matched
 \note{
 dlt_when_not_matched_insert_all, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaMergeBuilder}
+}

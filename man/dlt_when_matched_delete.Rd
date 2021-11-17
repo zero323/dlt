@@ -29,3 +29,6 @@ Delete row from the table
 \note{
 dlt_when_matched_delete, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaMergeBuilder}
+}

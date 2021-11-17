@@ -31,3 +31,6 @@ Update rows for table using set rules
 \note{
 dlt_when_matched_update, since 1.0.0
 }
+\seealso{
+\linkS4class{DeltaMergeBuilder}
+}

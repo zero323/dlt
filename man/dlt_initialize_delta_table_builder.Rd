@@ -6,7 +6,7 @@
 \alias{dlt_create_if_not_exists}
 \alias{dlt_replace}
 \alias{dlt_create_or_replace}
-\title{Initalize new DeltaTableBuilder}
+\title{Initalize a new DeltaTableBuilder}
 \usage{
 dlt_create()
 
@@ -20,7 +20,7 @@ dlt_create_or_replace()
 DeltaTableBuilder
 }
 \description{
-Initalize new DeltaTableBuilder
+Initalize a new DeltaTableBuilder
 }
 \section{Functions}{
 \itemize{
