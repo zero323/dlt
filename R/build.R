@@ -27,25 +27,25 @@ NULL
 #' @slot ops list list of operations in form of list(.method = ..., args = list(...))
 #'
 #' @examples \dontrun{
-#'   # Create DeltaTable in a given location
-#'   path <- tempfile()
+#' # Create DeltaTable in a given location
+#' path <- tempfile()
 #'
-#'   dlt_create() %>%
-#'     dlt_location(path) %>%
-#'     dlt_add_column("id", "integer", nullable = FALSE) %>%
-#'     dlt_add_columns(structType("key string, value double")) %>%
-#'     dlt_partitioned_by("key") %>%
-#'     dlt_comment("Key-value table") %>%
-#'     dlt_property("creation-time", as.character(Sys.time())) %>%
-#'     dlt_execute()
+#' dlt_create() %>%
+#'   dlt_location(path) %>%
+#'   dlt_add_column("id", "integer", nullable = FALSE) %>%
+#'   dlt_add_columns(structType("key string, value double")) %>%
+#'   dlt_partitioned_by("key") %>%
+#'   dlt_comment("Key-value table") %>%
+#'   dlt_property("creation-time", as.character(Sys.time())) %>%
+#'   dlt_execute()
 #'
-#'   # Create DeltaTable with a given table name
-#'   table_name <- paste0("delta_table_", paste(base::sample(letters, 10, TRUE), collapse=""))
+#' # Create DeltaTable with a given table name
+#' table_name <- paste0("delta_table_", paste(base::sample(letters, 10, TRUE), collapse = ""))
 #'
-#'   dlt_create() %>%
-#'     dlt_table_name(table_name) %>%
-#'     dlt_add_column("id", "integer") %>%
-#'     dlt_execute()
+#' dlt_create() %>%
+#'   dlt_table_name(table_name) %>%
+#'   dlt_add_column("id", "integer") %>%
+#'   dlt_execute()
 #' }
 #'
 #' @seealso [dlt_create()], [dlt_create_if_not_exists()], [dlt_replace()], [dlt_create_or_replace()]

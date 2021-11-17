@@ -27,33 +27,33 @@ NULL
 #' @slot .target DeltaTable. A reference to the target table
 #'
 #' @examples \dontrun{
-#'   set.seed(323)
-#'   target_path <- tempfile()
+#' set.seed(323)
+#' target_path <- tempfile()
 #'
-#'   data.frame(
-#'     id = 1:12,
-#'     key = rep(c("a", "b", "c"), each = 4),
-#'     value = rnorm(12)
-#'   ) %>%
-#'     createDataFrame() %>%
-#'     dlt_write(target_path)
-#'
-#'
-#'   source <- data.frame(
-#'     id = c(1, 3, 5, 7, 15, 19),
-#'     key = c("a", "d", "a", "f", "a", "c"),
-#'     value = c(-1, 1, -1, 1, 0, 1)
-#'   ) %>%
-#'     createDataFrame()
+#' data.frame(
+#'   id = 1:12,
+#'   key = rep(c("a", "b", "c"), each = 4),
+#'   value = rnorm(12)
+#' ) %>%
+#'   createDataFrame() %>%
+#'   dlt_write(target_path)
 #'
 #'
-#'   dlt_for_path(target_path) %>%
-#'     dlt_alias("target") %>%
-#'     dlt_merge(alias(source, "source"), expr("source.id = target.id")) %>%
-#'     dlt_when_matched_update(list(value = expr("source.value * target.value"))) %>%
-#'     dlt_when_not_matched_insert(c(id = "source.id"), column("source.value") != 0) %>%
-#'     dlt_execute() %>%
-#'     dlt_show()
+#' source <- data.frame(
+#'   id = c(1, 3, 5, 7, 15, 19),
+#'   key = c("a", "d", "a", "f", "a", "c"),
+#'   value = c(-1, 1, -1, 1, 0, 1)
+#' ) %>%
+#'   createDataFrame()
+#'
+#'
+#' dlt_for_path(target_path) %>%
+#'   dlt_alias("target") %>%
+#'   dlt_merge(alias(source, "source"), expr("source.id = target.id")) %>%
+#'   dlt_when_matched_update(list(value = expr("source.value * target.value"))) %>%
+#'   dlt_when_not_matched_insert(c(id = "source.id"), column("source.value") != 0) %>%
+#'   dlt_execute() %>%
+#'   dlt_show()
 #' }
 #'
 #' @note DeltaMergeBuilder, since 1.0.0
