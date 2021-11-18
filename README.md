@@ -2,6 +2,25 @@
 
 # dlt ‒ Delta Lake interface for SparkR
 
+## Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Batch reads and writes](#batch-reads-and-writes)
+  - [Loading DeltaTable objects](#loading-deltatable-objects)
+  - [Streaming reads and writes](#streaming-reads-and-writes)
+  - [Updates](#updates)
+  - [Deletes](#deletes)
+  - [Merging SparkDataFrame with DeltaTable](#merging-sparkdataframe-with-deltatable)
+  - [Time travel](#time-travel)
+  - [Querying Delta log](#querying-delta-log)
+  - [Building DeltaTables](#building-deltatables)
+  - [Maintenance and conversions](#maintenance-and-conversions)
+- [Notes](#notes)
+- [Acknowledgments](#acknowledgments)
+- [Disclaimer](#disclaimer)
+
+
 ## Installation
 
 This package can be installed from the main git repository
