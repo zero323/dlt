@@ -237,8 +237,7 @@ setGeneric(
 )
 
 
-#' @name dlt_write_stream
-#' @rdname dlt_write_stream
+#' @describeIn dlt_readwrite_stream Generic
 setGeneric(
   "dlt_write_stream",
   function(df, path, ...) {

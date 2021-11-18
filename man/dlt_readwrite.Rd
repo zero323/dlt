@@ -68,16 +68,15 @@ df <- data.frame(
 ) \%>\%
   createDataFrame()
 
-createDataFrame(df) \%>\%
-  dlt_write(path)
+dlt_write(df, path)
 
 dlt_read(path) \%>\%
   schema()
 
-createDataFrame(df) \%>\%
-  write.delta(path, mode = "overwrite")
+write.delta(df, path, mode = "overwrite")
 
 read.delta(path) \%>\%
   schema()
 }
+
 }

@@ -17,19 +17,41 @@
 #' @include generics.R package.R
 NULL
 
+#' Write and read streaming SparkDataFrame in delta format
+#'
+#' @name dlt_readwrite_stream
+#' @rdname dlt_readwrite_stream
+#'
+#' @examples \dontrun{
+#' set.seed(323)
+#' input_path <- tempfile()
+#' output_path <- tempfile()
+#'
+#' # Dummy input
+#' data.frame(
+#'   id = 1:12,
+#'   key = rep(c("a", "b", "c"), each = 4),
+#'   value = rnorm(12)
+#' ) %>%
+#'   createDataFrame() %>%
+#'   dlt_write(input_path)
+#'
+#' # Read data as stream and write back to output location
+#' query <- dlt_read_stream(path = input_path) %>%
+#'   dlt_write_stream(
+#'     path = output_path, queryName = "test", trigger.once = TRUE,
+#'     checkpointLocation = file.path(output_path, "_checkpoints", "test")
+#'   )
+#'
+#' awaitTermination(query)
+#' }
+#'
+NULL
 
-#' Create a streaming SparkDataFrame from a Delta directory
-#'
-#' Loads a DeltaTable, returning the result as a streaming SparkDataFrame.
-#'
+
 #' @param path path of file to read.
 #' @param ... additional data source specific named properties.
-#' @rdname dlt_read_stream
-#' @name dlt_read_stream
-#' @examples
-#' \dontrun{
-#' dlt_read_stream("/tmp/iris-delta")
-#' }
+#' @describeIn dlt_readwrite_stream  Loads data stored in delta format, returning the result as a streaming SparkDataFrame
 #' @export
 #' @note dlt_read_stream since 1.0.0
 dlt_read_stream <- function(path, ...) {
@@ -37,15 +59,10 @@ dlt_read_stream <- function(path, ...) {
 }
 
 
-#' Write streaming SparkDataFrame to Delta
-#'
-#' Writes streaming SparkDataFrame to Delta.
-#'
 #' @param df streaming SparkDataFrame
 #' @param path character path to write the data.
 #' @param ... additional arguments passed to writer
-#' @rdname dlt_write_stream
-#' @name dlt_write_stream
+#' @describeIn dlt_readwrite_stream Writes streaming SparkDataFrame using delta format
 #' @aliases dlt_write_stream,SparkDataFrame,character-method
 #' @export
 #' @note dlt_write_stream since 1.0.0
