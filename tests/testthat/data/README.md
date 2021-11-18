@@ -38,7 +38,7 @@ It can be reproduced locally, if needed, using the following snippet
 ```r
 set.seed(323)
 
-df <- tibble::tibble(
+df <- data.frame(
   id = 1:12,
   key = rep(c("a", "b", "c"), each=4),
   val = as.integer(round(base::sample(1:10, 12, TRUE))),
@@ -70,7 +70,7 @@ It can be reproduced locally, if needed, using the following snippet
 ```r
 set.seed(42)
 
-df <- tibble::tibble(
+df <- data.frame(
   id = as.integer(c(1, 3, 5, 14, 16)),
   key = c("a", "b", "b", "c", "d"),
   val = as.integer(round(base::sample(1:10, 5, TRUE))),
