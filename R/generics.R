@@ -108,6 +108,7 @@ setGeneric("dlt_merge", function(dt, source, condition) {
 #'
 #' @name dlt_execute
 #' @rdname dlt_execute
+#' @keywords internal
 setGeneric(
   "dlt_execute",
   function(bldr) {

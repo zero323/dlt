@@ -1,9 +1,67 @@
 url: ~
 
-
 authors:
   "Maciej Szymkiewicz":
     href: https://zero323.net
 
 template:
   package: preferably
+
+reference:
+- title: "Readers and writers"
+  desc: "Functions for reading and writing `SparkDataFrames` (both batch and streaming) in Delta format."
+- contents:
+    - dlt_read
+    - read.delta
+    - dlt_write
+    - write.delta
+    - dlt_write_stream
+    - dlt_read_stream
+
+- title: "Delta table"
+  desc: "Functions for loading, managing and updating `DeltaTable` objects."
+- contents:
+    - DeltaTable-class
+    - dlt_for_name
+    - dlt_for_path
+    - dlt_alias
+    - dlt_delete
+    - dlt_update
+    - dlt_to_df
+    - dlt_show
+    - dlt_history
+    - dlt_is_delta_table
+    - dlt_convert_to_delta
+    - dlt_generate_manifest
+    - dlt_upgrade_table_protocol
+    - dlt_vacuum
+
+- title: "Delta merge builder"
+  desc: "Functions for merging `DeltaTable` target with `SparkDataFrame` source."
+- contents:
+    - DeltaMergeBuilder-class
+    - dlt_merge
+    - dlt_execute,DeltaMergeBuilder-method
+    - dlt_when_matched_delete
+    - dlt_when_matched_update
+    - dlt_when_matched_update_all
+    - dlt_when_not_matched_insert
+    - dlt_when_not_matched_insert_all
+
+- title: "Delta table builder"
+  desc: "Functions for building new `DeltaTable` objects"
+- contents:
+    - DeltaTableBuilder-class
+    - dlt_initialize_delta_table_builder
+    - dlt_execute,DeltaTableBuilder-method
+    - dlt_location
+    - dlt_table_name
+    - dlt_add_column
+    - dlt_add_columns
+    - dlt_comment
+    - dlt_partitioned_by
+    - dlt_property
+
+- title: Generics
+- contents:
+    - dlt_execute
