@@ -16,8 +16,7 @@ linting:
   when: on_success
   script:
     - R -e 'install.packages(c("lintr", "styler"))'
-    - R -e 'styler::style_pkg(dry="fail")'
-    - R -e 'lintr::lint_package()'
+    - dev/lint.sh
 
 building_and_testing:
   image: rocker/tidyverse
@@ -30,10 +29,7 @@ building_and_testing:
     - R -e 'remotes::install_git("https://github.com/apache/spark.git", subdir="R/pkg", ref=Sys.getenv("SPARK_GIT_REF"))'
     - R -e 'remotes::install_deps(dependencies = TRUE)'
     - Rscript -e 'install.packages(c("covr", "DT"))'
-    - DLT_VERSION=$(grep -oP "(?<=Version:\ ).*" DESCRIPTION)
-    - R CMD build .
-    - R CMD check --no-tests --no-manual dlt_$DLT_VERSION.tar.gz
-    - Rscript -e 'print(covr::package_coverage())'
+    - dev/build-and-test.sh
 
 spellchecking:
   image: vlajos/misspell-fixer
