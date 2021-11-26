@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-R -e "devtools::document(); pkgdown::build_site()"
+Rscript -e "devtools::document(); pkgdown::build_site()"
 sed -i "s/%>%.html/pipe.html/g" docs/reference/*html
 sed -i "s/%&gt;%.html/pipe.html/g" docs/*html
 sed -i "s/%&gt;%.html/pipe.html/g" docs/articles/*html

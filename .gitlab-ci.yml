@@ -9,6 +9,7 @@ stages:
   - lint
   - build_and_test
   - spellcheck
+  - deploy
 
 linting:
   image: rocker/tidyverse
@@ -28,8 +29,14 @@ building_and_testing:
     - tar xf $SPARK_DIST.tgz && mv $SPARK_DIST /tmp && rm $SPARK_DIST.tgz
     - R -e 'remotes::install_git("https://github.com/apache/spark.git", subdir="R/pkg", ref=Sys.getenv("SPARK_GIT_REF"))'
     - R -e 'remotes::install_deps(dependencies = TRUE)'
-    - Rscript -e 'install.packages(c("covr", "DT"))'
+    - Rscript -e 'install.packages(c("covr", "DT", "pkgdown"))'
+    - Rscript -e 'remotes::install_git("https://github.com/amirmasoudabdol/preferably.git")'
     - dev/build-and-test.sh
+    - dev/build-docs.sh
+  artifacts:
+    expire_in: 45 mins
+    paths:
+      - docs
 
 spellchecking:
   image: vlajos/misspell-fixer
@@ -37,3 +44,17 @@ spellchecking:
   allow_failure: true
   script:
     - misspell-fixer -v README.md R tests
+
+pages:
+  image: rocker/tidyverse
+  stage: deploy
+  dependencies:
+    - building_and_testing
+  script:
+    - mv docs public
+  artifacts:
+    paths:
+      - public
+    expire_in: 45 mins
+  only:
+    - main
