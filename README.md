@@ -23,13 +23,13 @@
 
 ## Installation
 
-This package can be installed from the main git repository
+This package can be installed from the [main git repository](https://gitlab.com/zero323/dlt)
 
 ```r
 remotes::install_gitlab("zero323/dlt")
 ```
 
-or its GitHub mirror
+or its [GitHub mirror](https://github.com/zero323/dlt)
 
 ```r
 remotes::install_github("zero323/dlt")
