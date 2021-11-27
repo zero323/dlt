@@ -3,9 +3,11 @@ Type: Package
 Title: SparkR Delta Lake Interface
 Version: 1.0.0.0
 Authors@R: c(
-    person("Maciej", "Szymkiewicz", ,"mszymkiewicz@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-1469-9396", "a.k.a." = "zero323")))
+    person("zero323", NA, ,"mszymkiewicz@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-1469-9396")))
 Description: This package provides SparkR interface for Delta Lake.
+URL: https://dlt.zero323.net/
+BugReports: https://gitlab.com/zero323/dlt/-/issues
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
