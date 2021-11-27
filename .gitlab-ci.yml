@@ -29,7 +29,8 @@ building_and_testing:
     - tar xf $SPARK_DIST.tgz && mv $SPARK_DIST /tmp && rm $SPARK_DIST.tgz
     - R -e 'remotes::install_git("https://github.com/apache/spark.git", subdir="R/pkg", ref=Sys.getenv("SPARK_GIT_REF"))'
     - R -e 'remotes::install_deps(dependencies = TRUE)'
-    - Rscript -e 'install.packages(c("covr", "DT", "pkgdown"))'
+    - Rscript -e 'install.packages(c("covr", "DT"))'
+    - Rscript -e 'remotes::install_git("https://github.com/zero323/pkgdown.git@gitlab-icon")'
     - Rscript -e 'remotes::install_git("https://github.com/amirmasoudabdol/preferably.git")'
     - dev/build-and-test.sh
     - dev/build-docs.sh
