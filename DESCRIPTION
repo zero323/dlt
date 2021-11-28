@@ -7,7 +7,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-1469-9396")))
 Description: This package provides SparkR interface for Delta Lake.
 URL: https://dlt.zero323.net/
-BugReports: https://gitlab.com/zero323/dlt/-/issues
+BugReports: https://gitlab.com/zero323/dlt/issues
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
