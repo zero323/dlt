@@ -1,6 +1,7 @@
-<img alt="dlt logo" src="man/figures/dlt.png" width="15%" align="right" />
+<img class="mt-4" alt="dlt logo" src="man/figures/dlt.png" width=15% align="right" />
 
 # dlt ‒ Delta Lake interface for SparkR
+
 
 ## Contents
 
