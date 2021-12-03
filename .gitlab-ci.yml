@@ -31,7 +31,7 @@ building_and_testing:
     - R -e 'remotes::install_deps(dependencies = TRUE)'
     - Rscript -e 'install.packages(c("covr", "DT"))'
     - Rscript -e 'remotes::install_git("https://github.com/r-lib/pkgdown.git@677b3069b6d53a250adaf02ad4eb150201229031")'
-    - Rscript -e 'remotes::install_git("https://github.com/zero323/preferably.git@49ddb419ceb45d8752acd19821707bbe55173b1e")'
+    - Rscript -e 'remotes::install_git("https://github.com/amirmasoudabdol/preferably.git@3ae5b6084165d183cc632902cf9c378afd422f9a")'
     - dev/build-and-test.sh
     - dev/build-docs.sh
   artifacts:

@@ -6,6 +6,7 @@ authors:
 
 template:
   package: preferably
+  bootstrap: 5
 
 reference:
 - title: "Readers and writers"
