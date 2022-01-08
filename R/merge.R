@@ -56,6 +56,7 @@ NULL
 #'   dlt_show()
 #' }
 #'
+#' @export
 #' @note DeltaMergeBuilder, since 1.0.0
 setClass("DeltaMergeBuilder", slots = c(jmb = "jobj", .target = "DeltaTable"))
 

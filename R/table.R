@@ -70,6 +70,7 @@ NULL
 #'   showDF(truncate = FALSE)
 #' }
 #'
+#' @export
 #' @note DeltaTable since 1.0.0
 setClass("DeltaTable", slots = c(jdt = "jobj"))
 

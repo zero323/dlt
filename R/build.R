@@ -48,6 +48,7 @@ NULL
 #'   dlt_execute()
 #' }
 #'
+#' @export
 #' @seealso [dlt_create()], [dlt_create_if_not_exists()], [dlt_replace()], [dlt_create_or_replace()]
 #' @note DeltaTableBuilder, since 1.0.0
 setClass("DeltaTableBuilder", slots = c(method = "character", ops = "list"))
