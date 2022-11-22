@@ -38,7 +38,7 @@ remotes::install_github("zero323/dlt")
 
 and requires following R packages:
 
-- `SparkR (>= 3.1.0)`
+- `SparkR (>= 3.2.0)`
 - `magrittr`
 
 
@@ -46,7 +46,7 @@ Additionally, you'll have to ensure that a compatible Delta Lake jar is availabl
 for example by adding `delta-core` to `spark.jars.packages`:
 
 ```
-spark.jars.packages 		io.delta:delta-core_2.12:1.0.0
+spark.jars.packages 		io.delta:delta-core_2.12:1.1.0
 ```
 
 ## Usage
