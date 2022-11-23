@@ -377,7 +377,7 @@ dlt_read("/tmp/target-stream/", timestampAsOf=timestamps$timestamp[1]) %>%
 It is also possible to restore data to a specific version
 
 
-```{r}
+```r
 dlt_for_path("/tmp/target-stream/") %>%
   dlt_restore_to_version(0) %>%
   showDF()
