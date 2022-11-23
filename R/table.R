@@ -566,6 +566,7 @@ setMethod(
   }
 )
 
+
 #' Restore the DeltaTable to an older version of the table specified by version number.
 #' @param dt DeltaTable
 #' @param version int
@@ -591,6 +592,7 @@ setMethod(
     )
   }
 )
+
 
 #' Restore the DeltaTable to an older version of the table specified by a timestamp.
 #'
