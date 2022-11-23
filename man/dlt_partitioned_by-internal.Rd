@@ -16,9 +16,9 @@ Specify partitioning columns
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_partitioned_by,InternalDeltaTableBuilder-method}: Specify partitioning
-}}
+\item \code{dlt_partitioned_by(InternalDeltaTableBuilder)}: Specify partitioning
 
+}}
 \note{
 dlt_partitioned_by, since 1.0.0
 }

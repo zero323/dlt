@@ -25,13 +25,13 @@ Write and read streaming SparkDataFrame in delta format
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_write_stream}: Generic
+\item \code{dlt_write_stream()}: Generic
 
-\item \code{dlt_read_stream}: Loads data stored in delta format, returning the result as a streaming SparkDataFrame
+\item \code{dlt_read_stream()}: Loads data stored in delta format, returning the result as a streaming SparkDataFrame
 
-\item \code{dlt_write_stream,SparkDataFrame,character-method}: Writes streaming SparkDataFrame using delta format
+\item \code{dlt_write_stream(df = SparkDataFrame, path = character)}: Writes streaming SparkDataFrame using delta format
+
 }}
-
 \note{
 dlt_read_stream since 1.0.0
 

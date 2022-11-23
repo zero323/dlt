@@ -565,3 +565,57 @@ setMethod(
     dlt_merge(dt, source, SparkR::expr(condition))
   }
 )
+
+#' Restore the DeltaTable to an older version of the table specified by version number.
+#' @param dt DeltaTable
+#' @param version int
+#' @returns SparkDataFrame
+#'
+#' @name dlt_restore_to_version
+#' @rdname dlt_restore_to_version
+#' @aliases dlt_restore_to_version,DeltaTable,numeric-method
+#' @export
+#' @seealso [DeltaTable-class]
+#' @note dlt_restore_to_version, since 1.2.0
+setMethod(
+  "dlt_restore_to_version",
+  signature(
+    dt = "DeltaTable",
+    version = "numeric"
+  ),
+  function(dt, version) {
+    new(
+      "SparkDataFrame",
+      sparkR.callJMethod(dt@jdt, "restoreToVersion", as.integer(version)),
+      FALSE
+    )
+  }
+)
+
+#' Restore the DeltaTable to an older version of the table specified by a timestamp.
+#'
+#' Timestamp can be of the format yyyy-MM-dd or yyyy-MM-dd HH:mm:ss
+#' @param dt DeltaTable
+#' @param timestamp character formatted as yyyy-MM-dd or yyyy-MM-dd HH:mm:ss
+#' @returns SparkDataFrame
+#'
+#' @name dlt_restore_to_timestamp
+#' @rdname dlt_restore_to_timestamp
+#' @aliases dlt_restore_to_timestamp,DeltaTable,character-method
+#' @export
+#' @seealso [DeltaTable-class]
+#' @note dlt_restore_to_timestamp, since 1.2.0
+setMethod(
+  "dlt_restore_to_timestamp",
+  signature(
+    dt = "DeltaTable",
+    timestamp = "character"
+  ),
+  function(dt, timestamp) {
+    new(
+      "SparkDataFrame",
+      sparkR.callJMethod(dt@jdt, "restoreToTimestamp", timestamp),
+      FALSE
+    )
+  }
+)

@@ -36,9 +36,13 @@ Add column to the build table
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_add_column,InternalDeltaTableBuilder,character,character-method}: Add column to the table
-}}
+\item \code{dlt_add_column(
+  dtb = InternalDeltaTableBuilder,
+  col_name = character,
+  data_type = character
+)}: Add column to the table
 
+}}
 \note{
 dlt_add_column, since 1.0.0
 }

@@ -18,9 +18,13 @@ Set property for the build table
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_property,InternalDeltaTableBuilder,character,character-method}: Set property
-}}
+\item \code{dlt_property(
+  dtb = InternalDeltaTableBuilder,
+  key = character,
+  value = character
+)}: Set property
 
+}}
 \note{
 dlt_property, since 1.0.0
 }

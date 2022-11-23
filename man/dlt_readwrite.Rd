@@ -34,19 +34,19 @@ Write and read SparkDataFrame in delta format
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_write}: Generic
+\item \code{dlt_write()}: Generic
 
-\item \code{write.delta}: Generic
+\item \code{write.delta()}: Generic
 
-\item \code{dlt_read}: Load data stored as delta into \code{SparkDataFrame}
+\item \code{dlt_read()}: Load data stored as delta into \code{SparkDataFrame}
 
-\item \code{read.delta}: Load data stored as delta into \code{SparkDataFrame} (alias of \code{dlt_read})
+\item \code{read.delta()}: Load data stored as delta into \code{SparkDataFrame} (alias of \code{dlt_read})
 
-\item \code{dlt_write,SparkDataFrame,character-method}: Write SparkDataFrame` in delta format
+\item \code{dlt_write(df = SparkDataFrame, path = character)}: Write SparkDataFrame` in delta format
 
-\item \code{write.delta,SparkDataFrame,character-method}: Write \code{SparkDataFrame} in delta format (alias of \code{dlt_write})
+\item \code{write.delta(df = SparkDataFrame, path = character)}: Write \code{SparkDataFrame} in delta format (alias of \code{dlt_write})
+
 }}
-
 \note{
 dlt_read since 1.0.0
 

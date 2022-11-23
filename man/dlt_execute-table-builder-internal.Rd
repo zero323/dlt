@@ -17,9 +17,9 @@ Execute internal build operation on this builder
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_execute,InternalDeltaTableBuilder-method}: Execute internal build
-}}
+\item \code{dlt_execute(InternalDeltaTableBuilder)}: Execute internal build
 
+}}
 \note{
 dlt_execute, since 1.0.0
 }

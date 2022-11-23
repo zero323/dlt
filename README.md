@@ -46,7 +46,7 @@ Additionally, you'll have to ensure that a compatible Delta Lake jar is availabl
 for example by adding `delta-core` to `spark.jars.packages`:
 
 ```
-spark.jars.packages 		io.delta:delta-core_2.12:1.1.0
+spark.jars.packages 		io.delta:delta-core_2.12:1.2.0
 ```
 
 ## Usage
@@ -280,38 +280,11 @@ dlt_for_path("/tmp/target") %>%
 # only showing top 10 rows
 ```
 
-### Time travel
-
-Time travel is possible by setting `timestampAsOf` or `versionAsOf` `options`.
-
-```r
-dlt_read("/tmp/target-stream/") %>%
-  count()
-
-# [1] 12
-
-dlt_for_path("/tmp/target-stream/") %>%
-  dlt_delete("id IN (1, 3, 5)")
-
-dlt_read("/tmp/target-stream/") %>%
-  count()
-
-# [1] 9
-
-dlt_read("/tmp/target-stream/", versionAsOf=0) %>%
-  count()
-
-# [1] 12
-```
-
 ### Querying Delta log
 
 ```r
-
-target_stream_history <- dlt_for_path("/tmp/target-stream/") %>%
-  dlt_history()
-
-target_stream_history %>%
+dlt_for_path("/tmp/target-stream/") %>%
+  dlt_history() %>%
   printSchema()
 
 # root
@@ -340,17 +313,121 @@ target_stream_history %>%
 #  |    |-- value: string (valueContainsNull = true)
 #  |-- userMetadata: string (nullable = true)
 
-target_stream_history %>%
+dlt_for_path("/tmp/target-stream/") %>%
+  dlt_history() %>%
   select("version", "operation", "operationParameters") %>%
   showDF(truncate = FALSE)
-
+  
 # +-------+----------------+-------------------------------------------------------------------------------------+
 # |version|operation       |operationParameters                                                                  |
 # +-------+----------------+-------------------------------------------------------------------------------------+
-# |1      |DELETE          |{predicate -> ["(`id` IN (1, 3, 5))"]}                                               |
-# |0      |STREAMING UPDATE|{outputMode -> Append, queryId -> 8fce2444-5acf-4f82-adf9-838e64d5d82a, epochId -> 0}|
+# |0      |STREAMING UPDATE|{outputMode -> Append, queryId -> bb30dba2-3327-44f1-b6b3-b4bb99fdf57b, epochId -> 0}|
 # +-------+----------------+-------------------------------------------------------------------------------------+
+
+dlt_for_path("/tmp/target-stream/") %>%
+  dlt_delete("id IN (1, 3, 5)")
+
+dlt_for_path("/tmp/target-stream/") %>%
+  dlt_history() %>%
+  select("version", "operation", "operationParameters") %>%
+  showDF(truncate = FALSE)
+
++-------+----------------+-------------------------------------------------------------------------------------+
+|version|operation       |operationParameters                                                                  |
++-------+----------------+-------------------------------------------------------------------------------------+
+|1      |DELETE          |{predicate -> ["(id IN (1, 3, 5))"]}                                                 |
+|0      |STREAMING UPDATE|{outputMode -> Append, queryId -> bb30dba2-3327-44f1-b6b3-b4bb99fdf57b, epochId -> 0}|
++-------+----------------+-------------------------------------------------------------------------------------+
 ```
+
+### Time travel
+
+Time travel is possible by setting `versionAsOf`
+
+```r
+dlt_read("/tmp/target-stream/") %>%
+  count()
+
+# [1] 9
+
+dlt_read("/tmp/target-stream/", versionAsOf=0) %>%
+  count()
+
+# [1] 12
+
+```
+
+or `timestampAsOf` `options`.
+
+```r
+timestamps <- dlt_for_path("/tmp/target-stream/") %>%
+  dlt_history() %>%
+  where(column("version") %in% c(0, 1)) %>%
+  arrange("version") %>%
+  select(alias(date_format(column("timestamp") + expr("INTERVAL 1 second"), "yyyy-MM-dd HH:mm:ss"), "timestamp")) %>%
+  collect()
+  
+  
+dlt_read("/tmp/target-stream/", timestampAsOf=timestamps$timestamp[1]) %>%
+  count()
+
+# [1] 12
+```
+
+It is also possible to restore data to a specific version
+
+
+```{r}
+dlt_for_path("/tmp/target-stream/") %>%
+  dlt_restore_to_version(0) %>%
+  showDF()
+  
+# +------------------------+--------------------------+-----------------+------------------+------------------+-------------------+
+# |table_size_after_restore|num_of_files_after_restore|num_removed_files|num_restored_files|removed_files_size|restored_files_size|
+# +------------------------+--------------------------+-----------------+------------------+------------------+-------------------+
+# |                    2295|                         1|                1|                 1|              2175|               2295|
+# + ------------------------+--------------------------+-----------------+------------------+------------------+-------------------+
+
+dlt_read("/tmp/target-stream/") %>%
+  count()
+  
+# [1] 12
+
+dlt_for_path("/tmp/target-stream/") %>%
+  dlt_restore_to_version(1) %>%
+  showDF()
+  
+# +------------------------+--------------------------+-----------------+------------------+------------------+-------------------+
+# |table_size_after_restore|num_of_files_after_restore|num_removed_files|num_restored_files|removed_files_size|restored_files_size|
+# +------------------------+--------------------------+-----------------+------------------+------------------+-------------------+
+# |                    2175|                         1|                1|                 1|              2295|               2175|
+# + ------------------------+--------------------------+-----------------+------------------+------------------+-------------------+  
+  
+dlt_read("/tmp/target-stream/") %>%
+  count()
+  
+# [1] 9
+```
+
+or timestamp
+
+```r
+dlt_for_path("/tmp/target-stream/") %>%
+  dlt_restore_to_timestamp(timestamp = timestamps$timestamp[1]) %>%
+  showDF()
+
+# +------------------------+--------------------------+-----------------+------------------+------------------+-------------------+
+# |table_size_after_restore|num_of_files_after_restore|num_removed_files|num_restored_files|removed_files_size|restored_files_size|
+# +------------------------+--------------------------+-----------------+------------------+------------------+-------------------+
+# |                    2295|                         1|                1|                 1|              2175|               2295|
+# + ------------------------+--------------------------+-----------------+------------------+------------------+-------------------+  
+  
+dlt_read("/tmp/target-stream/") %>%
+  count()
+  
+# [1] 12  
+```
+
 
 ### Building DeltaTables
 

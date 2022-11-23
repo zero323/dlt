@@ -19,9 +19,9 @@ Specify data storage location for the build table.
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_location,InternalDeltaTableBuilder,character-method}: Specify data storage location
-}}
+\item \code{dlt_location(dtb = InternalDeltaTableBuilder, location = character)}: Specify data storage location
 
+}}
 \note{
 dlt_location, since 1.0.0
 }

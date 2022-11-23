@@ -22,11 +22,11 @@ Add columns to the build table
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_add_columns,InternalDeltaTableBuilder,structType-method}: Add columns to the table
+\item \code{dlt_add_columns(dtb = InternalDeltaTableBuilder, schema = structType)}: Add columns to the table
 
-\item \code{dlt_add_columns,InternalDeltaTableBuilder,character-method}: Add columns to the table
+\item \code{dlt_add_columns(dtb = InternalDeltaTableBuilder, schema = character)}: Add columns to the table
+
 }}
-
 \note{
 dlt_add_columns, since 1.0.0
 }
