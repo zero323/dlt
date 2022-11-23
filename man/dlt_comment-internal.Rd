@@ -19,9 +19,9 @@ Add comment describing the build table.
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_comment,InternalDeltaTableBuilder,character-method}: Add comment
-}}
+\item \code{dlt_comment(dtb = InternalDeltaTableBuilder, comment = character)}: Add comment
 
+}}
 \note{
 dlt_comment, since 1.0.0
 }

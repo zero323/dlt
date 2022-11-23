@@ -17,9 +17,9 @@ Execute build operation on this builder
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_execute,DeltaTableBuilder-method}: Execute build operation
-}}
+\item \code{dlt_execute(DeltaTableBuilder)}: Execute build operation
 
+}}
 \note{
 dlt_execute, since 1.0.0
 }

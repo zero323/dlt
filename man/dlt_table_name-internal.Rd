@@ -19,9 +19,9 @@ Specify name of the build table.
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_table_name,InternalDeltaTableBuilder,character-method}: Specify name of the table
-}}
+\item \code{dlt_table_name(dtb = InternalDeltaTableBuilder, identifier = character)}: Specify name of the table
 
+}}
 \note{
 dlt_table_name, since 1.0.0
 }

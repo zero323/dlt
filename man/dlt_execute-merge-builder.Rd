@@ -17,9 +17,9 @@ Execute merge operation on this builder
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_execute,DeltaMergeBuilder-method}: Execute merge operation
-}}
+\item \code{dlt_execute(DeltaMergeBuilder)}: Execute merge operation
 
+}}
 \note{
 dlt_execute, since 1.0.0
 }

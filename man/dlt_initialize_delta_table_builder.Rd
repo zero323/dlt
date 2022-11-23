@@ -24,19 +24,19 @@ Initalize a new DeltaTableBuilder
 }
 \section{Functions}{
 \itemize{
-\item \code{dlt_create}: On execute, creates a new DeltaTable if it dosen't exist,
+\item \code{dlt_create()}: On execute, creates a new DeltaTable if it dosen't exist,
 otherwise throws an exception.
 
-\item \code{dlt_create_if_not_exists}: On execute, creates a new DeltaTable if it dosen't exist,
+\item \code{dlt_create_if_not_exists()}: On execute, creates a new DeltaTable if it dosen't exist,
 otherwise does nothing.
 
-\item \code{dlt_replace}: On execute, replaces DeltaTable if it exists,
+\item \code{dlt_replace()}: On execute, replaces DeltaTable if it exists,
 otherwise throws an exception.
 
-\item \code{dlt_create_or_replace}: On execute, replaces DeltaTable if it exists,
+\item \code{dlt_create_or_replace()}: On execute, replaces DeltaTable if it exists,
 otherwise creates a new DeltaTable
-}}
 
+}}
 \note{
 dlt_create, since 1.0.0
 

@@ -102,6 +102,21 @@ setGeneric("dlt_merge", function(dt, source, condition) {
   standardGeneric("dlt_merge")
 })
 
+
+#' @name dlt_restore_to_version
+#' @rdname dlt_restore_to_version
+setGeneric("dlt_restore_to_version", function(dt, version) {
+  standardGeneric("dlt_restore_to_version")
+})
+
+
+#' @name dlt_restore_to_timestamp
+#' @rdname dlt_restore_to_timestamp
+setGeneric("dlt_restore_to_timestamp", function(dt, timestamp) {
+  standardGeneric("dlt_restore_to_timestamp")
+})
+
+
 #' Execute pending operation on a builder
 #'
 #' @param bldr a builder object
