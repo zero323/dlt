@@ -575,6 +575,7 @@ setMethod(
 #' @name dlt_restore_to_version
 #' @rdname dlt_restore_to_version
 #' @aliases dlt_restore_to_version,DeltaTable,numeric-method
+#'
 #' @export
 #' @seealso [DeltaTable-class]
 #' @note dlt_restore_to_version, since 1.2.0
@@ -604,6 +605,7 @@ setMethod(
 #' @name dlt_restore_to_timestamp
 #' @rdname dlt_restore_to_timestamp
 #' @aliases dlt_restore_to_timestamp,DeltaTable,character-method
+#'
 #' @export
 #' @seealso [DeltaTable-class]
 #' @note dlt_restore_to_timestamp, since 1.2.0

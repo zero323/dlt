@@ -48,3 +48,35 @@ test_that("can write and read back with compatibility aliases", {
     )
   })
 })
+
+
+test_that("can read with time travel", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    SparkR::sql("SELECT * FROM range(10)") %>%
+      dlt_write(path)
+
+    at_time <- strftime(Sys.time() + 1)
+    Sys.sleep(6)
+
+    dlt_for_path(path) %>%
+      dlt_delete("id >= 5")
+
+    dlt_read(path) %>%
+      SparkR::count() %>%
+      expect_equal(5)
+
+    dlt_read(path, versionAsOf = 0) %>%
+      SparkR::count() %>%
+      expect_equal(10)
+
+    dlt_read(path, timestampAsOf = at_time) %>%
+      SparkR::count() %>%
+      expect_equal(10)
+
+    dlt_read(path) %>%
+      SparkR::count() %>%
+      expect_equal(5)
+  })
+})

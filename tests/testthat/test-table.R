@@ -418,3 +418,56 @@ test_that("can generate symlink manifest", {
       expect_true()
   })
 })
+
+
+test_that("can restore to timestamp", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    SparkR::sql("SELECT * FROM range(10)") %>%
+      dlt_write(path)
+
+    at_time <- strftime(Sys.time() + 1)
+    Sys.sleep(6)
+
+    dlt_for_path(path) %>%
+      dlt_delete("id >= 5")
+
+    dlt_read(path) %>%
+      SparkR::count() %>%
+      expect_equal(5)
+
+    dlt_for_path(path) %>%
+      dlt_restore_to_timestamp(at_time) %>%
+      expect_s4_class("SparkDataFrame")
+
+    dlt_read(path) %>%
+      SparkR::count() %>%
+      expect_equal(10)
+  })
+})
+
+
+test_that("can restore to version", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    SparkR::sql("SELECT * FROM range(10)") %>%
+      dlt_write(path)
+
+    dlt_for_path(path) %>%
+      dlt_delete("id >= 5")
+
+    dlt_read(path) %>%
+      SparkR::count() %>%
+      expect_equal(5)
+
+    dlt_for_path(path) %>%
+      dlt_restore_to_version(0) %>%
+      expect_s4_class("SparkDataFrame")
+
+    dlt_read(path) %>%
+      SparkR::count() %>%
+      expect_equal(10)
+  })
+})
