@@ -30,8 +30,8 @@ building_and_testing:
     - R -e 'remotes::install_git("https://github.com/apache/spark.git", subdir="R/pkg", ref=Sys.getenv("SPARK_GIT_REF"))'
     - R -e 'remotes::install_deps(dependencies = TRUE)'
     - Rscript -e 'install.packages(c("covr", "DT"))'
-    - Rscript -e 'remotes::install_git("https://github.com/r-lib/pkgdown.git@677b3069b6d53a250adaf02ad4eb150201229031")'
-    - Rscript -e 'remotes::install_git("https://github.com/amirmasoudabdol/preferably.git@3ae5b6084165d183cc632902cf9c378afd422f9a")'
+    - Rscript -e 'remotes::install_git("https://github.com/r-lib/pkgdown.git")'
+    - Rscript -e 'remotes::install_git("https://github.com/amirmasoudabdol/preferably.git")'
     - dev/build-and-test.sh
     - dev/build-docs.sh
   artifacts:
