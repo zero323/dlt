@@ -7,10 +7,12 @@
 \usage{
 dlt_where(dob, partition_filter)
 
-\S4method{dlt_where}{DeltaOptimizeBuilder}(dob, partition_filter)
+\S4method{dlt_where}{DeltaOptimizeBuilder,character}(dob, partition_filter)
 }
 \arguments{
 \item{dob}{DeltaOptimizeBuilder}
+
+\item{partition_filter}{character SQL expression used to filter partition}
 }
 \value{
 DeltaOptimizeBuilder

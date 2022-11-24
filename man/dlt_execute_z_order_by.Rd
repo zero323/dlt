@@ -2,6 +2,7 @@
 % Please edit documentation in R/generics.R, R/optimize.R
 \name{dlt_execute_z_order_by}
 \alias{dlt_execute_z_order_by}
+\alias{dlt_execute_z_order_by,DeltaOptimizeBuilder-method}
 \title{Z-Order the data in selected partitions using the given columns.}
 \usage{
 dlt_execute_z_order_by(dob, ...)

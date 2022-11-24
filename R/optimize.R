@@ -25,7 +25,28 @@ NULL
 #' @slot job A Java object reference to the backing DeltaOptimizeBuilder
 #'
 #' @examples \dontrun{
+#' set.seed(323)
+#' target_path <- tempfile()
 #'
+#' data.frame(
+#'   id = 1:12,
+#'   key = rep(c("a", "b", "c"), each = 4),
+#'   value = rnorm(12)
+#' ) %>%
+#'   createDataFrame() %>%
+#'   dlt_write(target_path, partitionBy = "key")
+#'
+#' dlt_for_path(target_path) %>%
+#'   dlt_optimize() %>%
+#'   dlt_where("key = 'a'") %>%
+#'   dlt_execute_compaction() %>%
+#'   showDF()
+#'
+#' dlt_for_path(target_path) %>%
+#'   dlt_optimize() %>%
+#'   dlt_where("key = 'b'") %>%
+#'   dlt_execute_z_order_by("id") %>%
+#'   showDF()
 #' }
 #'
 #' @export
@@ -44,6 +65,7 @@ newDeltaOptimizeBuilder <- function(x) { # nolint
 #' Optimize the data layout of the table.
 #'
 #' @param dob DeltaOptimizeBuilder
+#' @param partition_filter character SQL expression used to filter partition
 #' @returns DeltaOptimizeBuilder
 #'
 #' @name dlt_where
@@ -55,7 +77,7 @@ newDeltaOptimizeBuilder <- function(x) { # nolint
 #' @note dlt_where, since 2.0.0
 setMethod(
   "dlt_where",
-  signature(dob = "DeltaOptimizeBuilder"),
+  signature(dob = "DeltaOptimizeBuilder", partition_filter = "character"),
   function(dob, partition_filter) {
     sparkR.callJMethod(
       dob@job,
@@ -100,6 +122,7 @@ setMethod(
 #'
 #' @name dlt_execute_z_order_by
 #' @rdname dlt_execute_z_order_by
+#' @aliases dlt_execute_z_order_by,DeltaOptimizeBuilder-method
 #'
 #' @export
 #' @seealso [DeltaOptimizeBuilder-class]
