@@ -117,6 +117,13 @@ setGeneric("dlt_restore_to_timestamp", function(dt, timestamp) {
 })
 
 
+#' @name dlt_optimize
+#' @rdname dlt_optimize
+setGeneric("dlt_optimize", function(dt) {
+  standardGeneric("dlt_optimize")
+})
+
+
 #' Execute pending operation on a builder
 #'
 #' @param bldr a builder object
@@ -266,4 +273,25 @@ setGeneric(
 #' @rdname dlt_show
 setGeneric("dlt_show", function(dt, ...) {
   standardGeneric("dlt_show")
+})
+
+
+#' @name dlt_where
+#' @rdname dlt_where
+setGeneric("dlt_where", function(dob, partition_filter) {
+  standardGeneric("dlt_where")
+})
+
+
+#' @name dlt_execute_compaction
+#' @rdname dlt_execute_compaction
+setGeneric("dlt_execute_compaction", function(dob) {
+  standardGeneric("dlt_execute_compaction")
+})
+
+
+#' @name dlt_execute_z_order_by
+#' @rdname dlt_execute_z_order_by
+setGeneric("dlt_execute_z_order_by", function(dob, ...) {
+  standardGeneric("dlt_execute_z_order_by")
 })

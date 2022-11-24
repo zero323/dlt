@@ -65,6 +65,15 @@ reference:
     - dlt_partitioned_by
     - dlt_property
 
+- title: "Delta table optimize builder"
+  desc: "Compose and execute OPTIMIZE."
+- contents:
+    - DeltaOptimizeBuilder-class
+    - dlt_execute_compaction
+    - dlt_execute_z_order_by
+    - dlt_optimize
+    - dlt_where
+
 - title: Generics
 - contents:
     - dlt_execute
