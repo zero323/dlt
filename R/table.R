@@ -623,3 +623,27 @@ setMethod(
     )
   }
 )
+
+
+#' Optimize the data layout of the table.
+#'
+#' @param dt DeltaTable
+#' @returns DeltaOptimizeBuilder
+#'
+#' @name dlt_optimize
+#' @rdname dlt_optimize
+#' @aliases dlt_optimize,DeltaTable-method
+#'
+#' @export
+#' @seealso [DeltaOptimizeBuilder-class]
+#' @note dlt_optimize, since 2.0.0
+setMethod(
+  "dlt_optimize",
+  signature(dt = "DeltaTable"),
+  function(dt) {
+    sparkR.callJMethod(
+      dt@jdt,
+      "optimize"
+    ) %>% newDeltaOptimizeBuilder()
+  }
+)

@@ -46,7 +46,7 @@ Additionally, you'll have to ensure that a compatible Delta Lake jar is availabl
 for example by adding `delta-core` to `spark.jars.packages`:
 
 ```
-spark.jars.packages 		io.delta:delta-core_2.12:1.2.0
+spark.jars.packages 		io.delta:delta-core_2.12:2.0.0
 ```
 
 ## Usage
@@ -368,7 +368,7 @@ timestamps <- dlt_for_path("/tmp/target-stream/") %>%
   collect()
   
   
-dlt_read("/tmp/target-stream/", timestampAsOf=timestamps$timestamp[1]) %>%
+dlt_read("/tmp/target-stream/", timestampAsOf = timestamps$timestamp[1]) %>%
   count()
 
 # [1] 12
@@ -531,6 +531,83 @@ read.json(key_val_log_path) %>%
 # |                null|UPGRADE PROTOCOL|    null|
 # |                null|            null|  {1, 3}|
 # +--------------------+----------------+--------+
+```
+
+This package also provides an interface for layout optimizations. One can 
+[compact](https://docs.delta.io/latest/optimizations-oss.html#compaction-bin-packing) with 
+
+```r
+target %>%
+  repartition(10) %>%
+  dlt_write("/tmp/target-optimize-compact", mode = "overwrite", partitionBy = "key")
+
+dlt_for_path("/tmp/target-optimize-compact") %>%
+  dlt_optimize() %>% 
+  dlt_where("key = 'a'") %>%
+  dlt_execute_compaction() %>%
+  select("metrics") %>%
+  showDF(truncate = FALSE)
+
+# +---------------------------------------------------------------------------------------------------------------------+
+# |metrics                                                                                                              |
+# +---------------------------------------------------------------------------------------------------------------------+
+# |{1, 4, {1750, 1750, 1750.0, 1, 1750}, {1633, 1633, 1633.0, 4, 6532}, 1, null, 1, 4, 0, false, 0, 0, 1669291200256, 0}|
+# +---------------------------------------------------------------------------------------------------------------------+
+```
+
+or without partition filter.
+
+```r
+
+dlt_for_path("/tmp/target-optimize-compact") %>%
+  dlt_optimize() %>%
+  dlt_execute_compaction() %>%
+  select("metrics") %>%
+  showDF(truncate = FALSE)
+
+# +-----------------------------------------------------------------------------------------------------------------------+
+# |metrics                                                                                                                |
+# +-----------------------------------------------------------------------------------------------------------------------+
+# |{2, 8, {1753, 1780, 1766.5, 2, 3533}, {1632, 1633, 1632.75, 8, 13062}, 2, null, 2, 9, 1, false, 0, 0, 1669291227707, 0}|
+# +-----------------------------------------------------------------------------------------------------------------------+
+```
+
+Similarly, one can [Z-Order](https://docs.delta.io/latest/optimizations-oss.html#z-ordering-multi-dimensional-clustering) 
+the files with
+
+```r
+target %>%
+  repartition(10) %>%        
+  dlt_write("/tmp/target-optimize-zorderby", mode="overwrite", partitionBy="key")
+
+dlt_for_path("/tmp/target-optimize-compact") %>%
+  dlt_optimize() %>% 
+  dlt_where("key = 'a'") %>%
+  dlt_execute_z_order_by("lat", "long") %>%
+  select("metrics") %>%
+  showDF(truncate = FALSE)
+
+# +----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+# |metrics                                                                                                                                                         |
+# +----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+# |{1, 1, {1750, 1750, 1750.0, 1, 1750}, {1750, 1750, 1750.0, 1, 1750}, 1, {all, {0, 0}, {1, 1750}, 0, {1, 1750}, 1, null}, 1, 1, 0, false, 0, 0, 1669291309308, 0}|
+# +----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+```
+
+or without partition filter
+
+```r
+dlt_for_path("/tmp/target-optimize-compact") %>%
+  dlt_optimize() %>%
+  dlt_execute_z_order_by("lat", "long") %>%
+  select("metrics") %>%
+  showDF(truncate = FALSE)
+
+# +----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+# |metrics                                                                                                                                                         |
+# +----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+# |{3, 3, {1750, 1780, 1761.0, 3, 5283}, {1750, 1780, 1761.0, 3, 5283}, 3, {all, {0, 0}, {3, 5283}, 0, {3, 5283}, 3, null}, 3, 3, 0, false, 0, 0, 1669291365663, 0}|
+# +----------------------------------------------------------------------------------------------------------------------------------------------------------------+
 ```
 
 ## Notes
