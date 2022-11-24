@@ -18,7 +18,28 @@ DeltaOptimizeBuilder, since 2.0.0
 }
 \examples{
 \dontrun{
+set.seed(323)
+target_path <- tempfile()
 
+data.frame(
+  id = 1:12,
+  key = rep(c("a", "b", "c"), each = 4),
+  value = rnorm(12)
+) \%>\%
+  createDataFrame() \%>\%
+  dlt_write(target_path,  partitionBy = "key")
+
+ dlt_for_path(target_path) \%>\%
+   dlt_optimize() \%>\%
+   dlt_where("key = 'a'") \%>\%
+   dlt_execute_compaction() \%>\%
+   showDF()
+
+ dlt_for_path(target_path) \%>\%
+   dlt_optimize() \%>\%
+   dlt_where("key = 'b'") \%>\%
+   dlt_execute_z_order_by("id") \%>\%
+   showDF()
 }
 
 }
