@@ -124,6 +124,13 @@ setGeneric("dlt_optimize", function(dt) {
 })
 
 
+#' @name dlt_detail
+#' @rdname dlt_detail
+setGeneric("dlt_detail", function(dt) {
+  standardGeneric("dlt_detail")
+})
+
+
 #' Execute pending operation on a builder
 #'
 #' @param bldr a builder object

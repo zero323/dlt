@@ -27,19 +27,19 @@ data.frame(
   value = rnorm(12)
 ) \%>\%
   createDataFrame() \%>\%
-  dlt_write(target_path,  partitionBy = "key")
+  dlt_write(target_path, partitionBy = "key")
 
- dlt_for_path(target_path) \%>\%
-   dlt_optimize() \%>\%
-   dlt_where("key = 'a'") \%>\%
-   dlt_execute_compaction() \%>\%
-   showDF()
+dlt_for_path(target_path) \%>\%
+  dlt_optimize() \%>\%
+  dlt_where("key = 'a'") \%>\%
+  dlt_execute_compaction() \%>\%
+  showDF()
 
- dlt_for_path(target_path) \%>\%
-   dlt_optimize() \%>\%
-   dlt_where("key = 'b'") \%>\%
-   dlt_execute_z_order_by("id") \%>\%
-   showDF()
+dlt_for_path(target_path) \%>\%
+  dlt_optimize() \%>\%
+  dlt_where("key = 'b'") \%>\%
+  dlt_execute_z_order_by("id") \%>\%
+  showDF()
 }
 
 }

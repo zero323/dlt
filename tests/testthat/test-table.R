@@ -471,3 +471,21 @@ test_that("can restore to version", {
       expect_equal(10)
   })
 })
+
+
+test_that("can get table details", {
+  path <- delta_test_tempfile()
+
+  withr::with_file(path, {
+    test_data() %>%
+      dlt_write(path)
+
+    dlt_for_path(path) %>%
+      dlt_detail() %>%
+      expect_s4_class("SparkDataFrame") %>%
+      SparkR::columns() %>%
+      magrittr::is_in(c("format", "location", "id"), .) %>%
+      all() %>%
+      expect_true()
+  })
+})
