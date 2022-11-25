@@ -68,6 +68,11 @@ NULL
 #'   dlt_history() %>%
 #'   select("version", "timestamp", "operation", "operationParameters") %>%
 #'   showDF(truncate = FALSE)
+#'
+#' # Get detailed information about the table
+#' tbl %>%
+#'   dlt_detail() %>%
+#'   showDF()
 #' }
 #'
 #' @export
@@ -645,5 +650,30 @@ setMethod(
       dt@jdt,
       "optimize"
     ) %>% newDeltaOptimizeBuilder()
+  }
+)
+
+
+#' Get the details of a Delta table such as the format, name, and size.
+#'
+#' @param dt DeltaTable
+#' @returns SparkDataFrame containing information about the table
+#'
+#' @name dlt_detail
+#' @rdname dlt_detail
+#' @aliases dlt_detail,DeltaTable-method
+#'
+#' @export
+#' @seealso [DeltaTable-class]
+#' @note dlt_detail, since 2.1.0
+setMethod(
+  "dlt_detail",
+  signature(dt = "DeltaTable"),
+  function(dt) {
+    new(
+      "SparkDataFrame",
+      sparkR.callJMethod(dt@jdt, "detail"),
+      FALSE
+    )
   }
 )

@@ -38,7 +38,7 @@ remotes::install_github("zero323/dlt")
 
 and requires following R packages:
 
-- `SparkR (>= 3.2.0)`
+- `SparkR (>= 3.3.0)`
 - `magrittr`
 
 
@@ -46,7 +46,7 @@ Additionally, you'll have to ensure that a compatible Delta Lake jar is availabl
 for example by adding `delta-core` to `spark.jars.packages`:
 
 ```
-spark.jars.packages 		io.delta:delta-core_2.12:2.0.0
+spark.jars.packages 		io.delta:delta-core_2.12:2.1.0
 ```
 
 ## Usage
@@ -163,6 +163,24 @@ query <- dlt_read_stream("/tmp/target") %>%
 
 awaitTermination(query, 10000)
 # [1] TRUE
+```
+
+### Getting table details
+
+`dlt_detail` can be used to retrieve detailed information about the format, location and 
+other important properties of the table.
+
+```r
+dlt_for_path("/tmp/target/") %>%
+  dlt_detail() %>%
+  drop(c("id", "location", "createdAt", "lastModified")) %>%
+  showDF()
+
+# +------+----+-----------+----------------+--------+-----------+----------+----------------+----------------+
+# |format|name|description|partitionColumns|numFiles|sizeInBytes|properties|minReaderVersion|minWriterVersion|
+# +------+----+-----------+----------------+--------+-----------+----------+----------------+----------------+
+# | delta|null|       null|              []|       1|       2290|        {}|               1|               2|
+# +------+----+-----------+----------------+--------+-----------+----------+----------------+----------------+
 ```
 
 

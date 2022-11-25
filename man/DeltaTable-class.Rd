@@ -60,6 +60,11 @@ tbl \%>\%
   dlt_history() \%>\%
   select("version", "timestamp", "operation", "operationParameters") \%>\%
   showDF(truncate = FALSE)
+
+# Get detailed information about the table
+tbl \%>\%
+  dlt_detail() \%>\%
+  showDF()
 }
 
 }

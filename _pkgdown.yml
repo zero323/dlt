@@ -38,6 +38,7 @@ reference:
     - dlt_vacuum
     - dlt_restore_to_timestamp
     - dlt_restore_to_version
+    - dlt_detail
 
 - title: "Delta merge builder"
   desc: "Functions for merging `DeltaTable` target with `SparkDataFrame` source."
